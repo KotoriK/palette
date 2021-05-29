@@ -1,0 +1,19 @@
+{
+  "name": "palette",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "example": "parcel serve --dist-dir ./build example/index.html"
+  },
+  "keywords": [
+    "palette","theme color","kmeans"
+  ],
+  "author": "KotoriK",
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^2.0.0-beta.3.1",
+    "simple-statistics": "^7.7.0",
+    "typescript": "^4.3.2"
+  }
+}

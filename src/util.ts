@@ -1,5 +1,15 @@
 export type HSLA = [number, number, number, number]
 export type RGBA = [number, number, number, number]
+export function awaitImage(imgSource: HTMLImageElement) {
+    return new Promise<void>((resolve, reject) => {
+        imgSource.addEventListener('load', () => {
+            resolve()
+        })
+        imgSource.addEventListener('error', () => {
+            reject()
+        })
+    })
+}
 export function readImage(imgSource: HTMLImageElement) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
@@ -15,19 +25,17 @@ export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: nu
     const { width, height } = imgSource
     const scale = width * height / maxSample
     if (scale > 1) {
-        const n_width = width /  Math.sqrt(scale)
+        const n_width = width / Math.sqrt(scale)
         const n_height = height / Math.sqrt(scale)
         canvas.height = n_height
         canvas.width = n_width
         ctx?.drawImage(imgSource, 0, 0, n_width, n_height)
         return ctx?.getImageData(0, 0, n_width, n_height)
-
     } else {
         canvas.height = height
         canvas.width = width
         ctx?.drawImage(imgSource, 0, 0)
         return ctx?.getImageData(0, 0, width, height)
-
     }
 }
 /**
@@ -151,3 +159,20 @@ export const sortHSL = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) =>
         return result
     }
 export const hslaCSSText = ([h, s, l, a]: HSLA) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`
+/* export class RGBAArray extends Uint8ClampedArray {
+    pixel(pixel_index: number) {
+        return [pixel_index * 4, pixel_index * 4 + 1, pixel_index * 4 + 2, pixel_index * 4 + 3]
+    }
+    r(pixel_index: number) {
+        return pixel_index * 4
+    }
+    g(pixel_index: number) {
+        return pixel_index * 4 + 1
+    }
+    b(pixel_index: number) {
+        return pixel_index * 4 + 2
+    }
+    a(pixel_index: number) {
+        return pixel_index * 4 + 3
+    }
+} */

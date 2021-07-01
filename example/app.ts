@@ -1,5 +1,5 @@
 
-import { rgbaToHSLA, normalizeRGBA, sortHSL, RGBA, readImageDownsampling } from "../src/util";
+import { rgbaToHSLA, normalizeRGBA, sortHSL, RGBA, readImageDownsampling, toPixel } from "../src/util";
 import { kmeanWorkerData } from "./worker";
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
@@ -15,8 +15,9 @@ const workers = new Array(5).fill(0).map(()=>new Worker('./worker.ts'))
 function run(){
     
     cleanResult()
+    const data = toPixel(readImageDownsampling(img,100*1000)!)
     workers.forEach((worker)=>{
-      worker.postMessage({img:readImageDownsampling(img,100*1000),k:parseInt((document.getElementById('k') as HTMLInputElement).value),attempt:100} as kmeanWorkerData)
+      worker.postMessage({img:data,k:parseInt((document.getElementById('k') as HTMLInputElement).value),attempt:100} as kmeanWorkerData)
     worker.onmessage = (e)=>{
        const {time,result} = e.data
        const row = document.createElement('div')

@@ -1,0 +1,17 @@
+export declare type HSLA = [number, number, number, number];
+export declare type RGBA = [number, number, number, number];
+export declare function awaitImage(imgSource: HTMLImageElement): Promise<void>;
+export declare function readImage(imgSource: HTMLImageElement): ImageData | undefined;
+export declare function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number): ImageData | undefined;
+/**
+ * 从@type {Uint8ClampedArray} 中读取，每四个元素合并到一个数组元素中
+ * @param img 要处理的图像矩阵
+ * @returns
+ */
+export declare function toPixel(img: ImageData): RGBA[];
+export declare function euclidean_distance(a: RGBA, b: RGBA): number;
+export declare function normalizeRGBA(rgba: RGBA): RGBA;
+export declare function rgbaToHSLA(rgba: RGBA): HSLA;
+export declare type IndexOFHSLA = 0 | 1 | 2 | 3;
+export declare const sortHSL: (sort?: IndexOFHSLA[]) => (a: HSLA, b: HSLA) => number;
+export declare const hslaCSSText: ([h, s, l, a]: HSLA) => string;

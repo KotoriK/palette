@@ -1,3 +1,3 @@
 import kmeans from './kmeans';
-export * as util from './util';
+export * from './util';
 export { kmeans };

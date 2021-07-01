@@ -1,11 +1,12 @@
 {
   "name": "palette",
   "version": "1.0.0",
-  "description": "",
+  "description": "cluster representative color",
   "main": "src/index.ts",
   "scripts": {
     "example": "parcel serve --dist-dir ./build example/index.html",
-    "benchmark": "ts-node ./benchmark/kmeans.ts"
+    "benchmark": "ts-node ./benchmark/kmeans.ts",
+    "build":"tsc"
   },
   "keywords": [
     "palette",

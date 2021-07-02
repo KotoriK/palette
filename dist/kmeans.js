@@ -53,6 +53,10 @@ function kmeans(data, k, attempt) {
         }
         _swap_array(new_cluster_centers, cluster_centers);
         iterate_time++;
+        //清空累加
+        for (let i = 0; i < k; i++) {
+            cluster_sum[i][4] = 0;
+        }
     }
     return {
         cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4])

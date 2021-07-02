@@ -48,7 +48,7 @@ function kmeans(data, k, attempt) {
         }
         if (diff <= THRESOLD) {
             return {
-                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4])
+                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4]), size: data.length
             };
         }
         _swap_array(new_cluster_centers, cluster_centers);
@@ -59,7 +59,7 @@ function kmeans(data, k, attempt) {
         }
     }
     return {
-        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4])
+        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]), size: data.length
     };
 }
 exports.default = kmeans;

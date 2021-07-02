@@ -5,4 +5,6 @@ export interface KMeansResult {
     iterate_time: number;
     fit_thresold: boolean;
     label: number[];
+    /**输入的图像的像素计数 */
+    size: number;
 }

@@ -46,7 +46,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number):KMeansR
         }
         if (diff <= THRESOLD) {
             return {
-                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4])
+                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4]),size:data.length
             }
         }
         _swap_array(new_cluster_centers, cluster_centers)
@@ -57,7 +57,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number):KMeansR
         }
     }
     return {
-        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4])
+        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]),size:data.length
     }
 }
 export interface KMeansResult {
@@ -65,6 +65,8 @@ export interface KMeansResult {
     iterate_time: number,
     fit_thresold: boolean,
     label: number[]
+    /**输入的图像的像素计数 */
+    size:number
 }
 function _swap_array(from: Array<any>, to: Array<any>) {
     for (let i = 0; i < from.length; i++) {

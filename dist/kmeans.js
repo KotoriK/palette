@@ -55,7 +55,9 @@ function kmeans(data, k, attempt) {
         iterate_time++;
         //清空累加
         for (let i = 0; i < k; i++) {
-            cluster_sum[i][4] = 0;
+            for (let j = 0; j < 5; j++) {
+                cluster_sum[i][j] = 0;
+            }
         }
     }
     return {

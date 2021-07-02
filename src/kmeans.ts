@@ -1,6 +1,6 @@
 import { toPixel, RGBA, euclidean_distance } from "./util"
 
-export default function kmeans(data: RGBA[], k: number, attempt: number):KMeansResult {
+export default function kmeans(data: RGBA[], k: number, attempt: number): KMeansResult {
     const THRESOLD = 1
     const cluster_centers: RGBA[] = new Array(k)
     const new_cluster_centers = new Array(k)
@@ -9,7 +9,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number):KMeansR
         cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
     }
     let iterate_time = 0
-    const cluster_sum = new Array(k).fill(0).map(() => new Array(5).fill(0)) as [number,number,number,number,number][]//[r,g,b,a,c]
+    const cluster_sum = new Array(k).fill(0).map(() => new Array(5).fill(0)) as [number, number, number, number, number][]//[r,g,b,a,c]
     while (iterate_time < attempt) {
         //准备坐标和
         //计算每个点与中心的距离
@@ -46,18 +46,20 @@ export default function kmeans(data: RGBA[], k: number, attempt: number):KMeansR
         }
         if (diff <= THRESOLD) {
             return {
-                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4]),size:data.length
+                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4]), size: data.length
             }
         }
         _swap_array(new_cluster_centers, cluster_centers)
         iterate_time++
         //清空累加
-        for(let i = 0;i<k;i++){
-            cluster_sum[i][4]=0
+        for (let i = 0; i < k; i++) {
+            for (let j = 0; j < 5; j++) {
+                cluster_sum[i][j] = 0
+            }
         }
     }
     return {
-        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]),size:data.length
+        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]), size: data.length
     }
 }
 export interface KMeansResult {
@@ -66,7 +68,7 @@ export interface KMeansResult {
     fit_thresold: boolean,
     label: number[]
     /**输入的图像的像素计数 */
-    size:number
+    size: number
 }
 function _swap_array(from: Array<any>, to: Array<any>) {
     for (let i = 0; i < from.length; i++) {

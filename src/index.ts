@@ -1,4 +1,4 @@
-import kmeans from './kmeans'
+import kmeans,{KMeansResult} from './kmeans'
 
 export * from './util'
-export { kmeans }
+export { kmeans,KMeansResult }

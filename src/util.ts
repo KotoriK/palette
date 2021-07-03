@@ -11,18 +11,19 @@ export function awaitImage(imgSource: HTMLImageElement) {
     })
 }
 export function readImage(imgSource: HTMLImageElement) {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    const { width, height } = imgSource
-    canvas.height = height
-    canvas.width = width
-    ctx?.drawImage(imgSource, 0, 0)
-    return ctx?.getImageData(0, 0, width, height)
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    document.body.appendChild(canvas)
+    const { naturalWidth, naturalHeight } = imgSource;
+    canvas.height = naturalHeight
+    canvas.width = naturalWidth
+    ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
+    return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
 export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
-    const { width, height } = imgSource
+    const { naturalWidth:width, naturalHeight:height } = imgSource
     const scale = width * height / maxSample
     if (scale > 1) {
         const n_width = width / Math.sqrt(scale)

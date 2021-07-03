@@ -8,7 +8,7 @@ export interface kmeanWorkerData{
 self.onmessage = (e)=>{
     const {img,k,attempt} = e.data
     performance.mark('runstart')
-        const result = kmeans(toPixel(img as ImageData), k,attempt)
+        const result = kmeans(img, k,attempt)
         performance.mark('runend')
         performance.measure('run time','runstart','runend');
         (e.target as Worker).postMessage({time:performance.getEntriesByName('run time')[0].duration,result})

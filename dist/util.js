@@ -15,7 +15,6 @@ exports.awaitImage = awaitImage;
 function readImage(imgSource) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    document.body.appendChild(canvas);
     const { naturalWidth, naturalHeight } = imgSource;
     canvas.height = naturalHeight;
     canvas.width = naturalWidth;

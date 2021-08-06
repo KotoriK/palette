@@ -1,42 +1,61 @@
+import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
+
 export type HSLA = [number, number, number, number]
 export type RGBA = [number, number, number, number]
-export function awaitImage(imgSource: HTMLImageElement) {
+export function awaitImage(imgElement: HTMLImageElement) {
     return new Promise<void>((resolve, reject) => {
-        imgSource.addEventListener('load', () => {
+        imgElement.addEventListener('load', () => {
             resolve()
         })
-        imgSource.addEventListener('error', () => {
+        imgElement.addEventListener('error', () => {
             reject()
         })
     })
 }
 export function readImage(imgSource: HTMLImageElement) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    return _readImage(_prepare2DContext,imgSource)
+}
+export function readImageAsync(imgSource: HTMLImageElement) {
+    return _readImage(_prepare2DContextAsync as any,imgSource)
+}
+function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D,imgSource: HTMLImageElement){
     const { naturalWidth, naturalHeight } = imgSource;
-    canvas.height = naturalHeight
-    canvas.width = naturalWidth
+    const ctx = prepareCtx(naturalWidth,naturalHeight)
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
     return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
 export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number) {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    const { naturalWidth:width, naturalHeight:height } = imgSource
+    return _readImageDownsampling(_prepare2DContext, imgSource, maxSample)
+}
+function _readImageDownsampling(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D, imgSource: HTMLImageElement, maxSample: number) {
+    const { naturalWidth: width, naturalHeight: height } = imgSource
     const scale = width * height / maxSample
     if (scale > 1) {
         const n_width = width / Math.sqrt(scale)
         const n_height = height / Math.sqrt(scale)
-        canvas.height = n_height
-        canvas.width = n_width
+        const ctx = prepareCtx(n_width, n_height)
         ctx?.drawImage(imgSource, 0, 0, n_width, n_height)
         return ctx?.getImageData(0, 0, n_width, n_height)
     } else {
-        canvas.height = height
-        canvas.width = width
+        const ctx = prepareCtx(width, height)
         ctx?.drawImage(imgSource, 0, 0)
         return ctx?.getImageData(0, 0, width, height)
     }
+}
+function _prepare2DContext(width: number, height: number) {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d') as NodeCanvasRenderingContext2D|CanvasRenderingContext2D
+        canvas.height = height
+        canvas.width = width
+        return ctx
+}
+/**
+ * Use OffscreenCanvas
+ */
+function _prepare2DContextAsync(width: number, height: number) {
+    const canvas = new OffscreenCanvas(width, height)
+    const ctx = canvas.getContext('2d')!
+    return ctx
 }
 /**
  * 从@type {Uint8ClampedArray} 中读取，每四个元素合并到一个数组元素中

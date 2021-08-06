@@ -1,48 +1,66 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hslaCSSText = exports.sortHSL = exports.rgbaToHSLA = exports.normalizeRGBA = exports.euclidean_distance = exports.toPixel = exports.readImageDownsampling = exports.readImage = exports.awaitImage = void 0;
-function awaitImage(imgSource) {
+exports.hslaCSSText = exports.sortHSL = exports.rgbaToHSLA = exports.normalizeRGBA = exports.euclidean_distance = exports.toPixel = exports.readImageDownsampling = exports.readImageAsync = exports.readImage = exports.awaitImage = void 0;
+function awaitImage(imgElement) {
     return new Promise((resolve, reject) => {
-        imgSource.addEventListener('load', () => {
+        imgElement.addEventListener('load', () => {
             resolve();
         });
-        imgSource.addEventListener('error', () => {
+        imgElement.addEventListener('error', () => {
             reject();
         });
     });
 }
 exports.awaitImage = awaitImage;
 function readImage(imgSource) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    return _readImage(_prepare2DContext, imgSource);
+}
+exports.readImage = readImage;
+function readImageAsync(imgSource) {
+    return _readImage(_prepare2DContextAsync, imgSource);
+}
+exports.readImageAsync = readImageAsync;
+function _readImage(prepareCtx, imgSource) {
     const { naturalWidth, naturalHeight } = imgSource;
-    canvas.height = naturalHeight;
-    canvas.width = naturalWidth;
+    const ctx = prepareCtx(naturalWidth, naturalHeight);
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
     return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
-exports.readImage = readImage;
 function readImageDownsampling(imgSource, maxSample) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    return _readImageDownsampling(_prepare2DContext, imgSource, maxSample);
+}
+exports.readImageDownsampling = readImageDownsampling;
+function _readImageDownsampling(prepareCtx, imgSource, maxSample) {
     const { naturalWidth: width, naturalHeight: height } = imgSource;
     const scale = width * height / maxSample;
     if (scale > 1) {
         const n_width = width / Math.sqrt(scale);
         const n_height = height / Math.sqrt(scale);
-        canvas.height = n_height;
-        canvas.width = n_width;
+        const ctx = prepareCtx(n_width, n_height);
         ctx?.drawImage(imgSource, 0, 0, n_width, n_height);
         return ctx?.getImageData(0, 0, n_width, n_height);
     }
     else {
-        canvas.height = height;
-        canvas.width = width;
+        const ctx = prepareCtx(width, height);
         ctx?.drawImage(imgSource, 0, 0);
         return ctx?.getImageData(0, 0, width, height);
     }
 }
-exports.readImageDownsampling = readImageDownsampling;
+function _prepare2DContext(width, height) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.height = height;
+    canvas.width = width;
+    return ctx;
+}
+/**
+ * Use OffscreenCanvas
+ */
+function _prepare2DContextAsync(width, height) {
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+    return ctx;
+}
 /**
  * 从@type {Uint8ClampedArray} 中读取，每四个元素合并到一个数组元素中
  * @param img 要处理的图像矩阵

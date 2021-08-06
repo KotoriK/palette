@@ -1,8 +1,9 @@
 export declare type HSLA = [number, number, number, number];
 export declare type RGBA = [number, number, number, number];
-export declare function awaitImage(imgSource: HTMLImageElement): Promise<void>;
-export declare function readImage(imgSource: HTMLImageElement): ImageData | undefined;
-export declare function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number): ImageData | undefined;
+export declare function awaitImage(imgElement: HTMLImageElement): Promise<void>;
+export declare function readImage(imgSource: HTMLImageElement): import("canvas").ImageData;
+export declare function readImageAsync(imgSource: HTMLImageElement): import("canvas").ImageData;
+export declare function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number): import("canvas").ImageData;
 /**
  * 从@type {Uint8ClampedArray} 中读取，每四个元素合并到一个数组元素中
  * @param img 要处理的图像矩阵

@@ -24,8 +24,17 @@ function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderi
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
     return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
+/**
+ * 降采样后读取图片
+ * @param imgSource 
+ * @param maxSample 
+ * @returns 
+ */
 export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number) {
     return _readImageDownsampling(_prepare2DContext, imgSource, maxSample)
+}
+export function readImageDownsamplingAsync(imgSource: HTMLImageElement, maxSample: number) {
+    return _readImageDownsampling(_prepare2DContextAsync as any, imgSource, maxSample)
 }
 function _readImageDownsampling(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D, imgSource: HTMLImageElement, maxSample: number) {
     const { naturalWidth: width, naturalHeight: height } = imgSource
@@ -70,6 +79,12 @@ export function toPixel(img: ImageData) {
     }
     return array
 }
+/**
+ * 返回两个四维坐标间的欧几里得距离
+ * @param a 
+ * @param b 
+ * @returns 
+ */
 export function euclidean_distance(a: RGBA, b: RGBA) {
     const r = a[0] - b[0]
     const g = a[1] - b[1]
@@ -88,6 +103,11 @@ export function euclidean_distance(a: RGBA, b: RGBA) {
         + Math.pow(a[3] - b[3], 2)
     ) */
 }
+/**
+ * 
+ * @param param0 一个包含三个数字的数组
+ * @returns [max,min]
+ */
 function max_min_of_three([a, b, c]: [number, number, number]) {
     if (a > b) {
         if (b > c) {

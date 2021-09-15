@@ -104,7 +104,7 @@ export function euclidean_distance(a: RGBA, b: RGBA) {
     ) */
 }
 /**
- * 
+ * 以数组形式返回三个数字中的最大值与最小值
  * @param param0 一个包含三个数字的数组
  * @returns [max,min]
  */

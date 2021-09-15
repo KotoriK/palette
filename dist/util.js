@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hslaCSSText = exports.sortHSL = exports.rgbaToHSLA = exports.normalizeRGBA = exports.euclidean_distance = exports.toPixel = exports.readImageDownsampling = exports.readImageAsync = exports.readImage = exports.awaitImage = void 0;
+exports.rgbaCSSText = exports.hslaCSSText = exports.sortHSL = exports.rgbaToHSLA = exports.normalizeRGBA = exports.euclidean_distance = exports.toPixel = exports.readImageDownsamplingAsync = exports.readImageDownsampling = exports.readImageAsync = exports.readImage = exports.awaitImage = void 0;
 function awaitImage(imgElement) {
     return new Promise((resolve, reject) => {
         imgElement.addEventListener('load', () => {
@@ -26,10 +26,20 @@ function _readImage(prepareCtx, imgSource) {
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
     return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
+/**
+ * 降采样后读取图片
+ * @param imgSource
+ * @param maxSample
+ * @returns
+ */
 function readImageDownsampling(imgSource, maxSample) {
     return _readImageDownsampling(_prepare2DContext, imgSource, maxSample);
 }
 exports.readImageDownsampling = readImageDownsampling;
+function readImageDownsamplingAsync(imgSource, maxSample) {
+    return _readImageDownsampling(_prepare2DContextAsync, imgSource, maxSample);
+}
+exports.readImageDownsamplingAsync = readImageDownsamplingAsync;
 function _readImageDownsampling(prepareCtx, imgSource, maxSample) {
     const { naturalWidth: width, naturalHeight: height } = imgSource;
     const scale = width * height / maxSample;
@@ -75,6 +85,12 @@ function toPixel(img) {
     return array;
 }
 exports.toPixel = toPixel;
+/**
+ * 返回两个四维坐标间的欧几里得距离
+ * @param a
+ * @param b
+ * @returns
+ */
 function euclidean_distance(a, b) {
     const r = a[0] - b[0];
     const g = a[1] - b[1];
@@ -92,6 +108,11 @@ function euclidean_distance(a, b) {
     ) */
 }
 exports.euclidean_distance = euclidean_distance;
+/**
+ * 以数组形式返回三个数字中的最大值与最小值
+ * @param param0 一个包含三个数字的数组
+ * @returns [max,min]
+ */
 function max_min_of_three([a, b, c]) {
     if (a > b) {
         if (b > c) {
@@ -196,6 +217,8 @@ const sortHSL = (sort = [0, 1, 2, 3]) => (a, b) => {
 exports.sortHSL = sortHSL;
 const hslaCSSText = ([h, s, l, a]) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`;
 exports.hslaCSSText = hslaCSSText;
+const rgbaCSSText = (pixel) => `rgba(${pixel.map(v => Math.floor(v)).join(',')})`;
+exports.rgbaCSSText = rgbaCSSText;
 /* export class RGBAArray extends Uint8ClampedArray {
     pixel(pixel_index: number) {
         return [pixel_index * 4, pixel_index * 4 + 1, pixel_index * 4 + 2, pixel_index * 4 + 3]

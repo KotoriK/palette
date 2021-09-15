@@ -17,9 +17,9 @@ function kmeans(data, k, attempt) {
         for (let i = 0; i < data.length; i++) {
             const data_item = data[i];
             let cluster_index = 0;
-            let _min_distance = util_1.euclidean_distance(data_item, cluster_centers[0]);
+            let _min_distance = (0, util_1.euclidean_distance)(data_item, cluster_centers[0]);
             for (let j = 1; j < k; j++) {
-                const distance = util_1.euclidean_distance(data_item, cluster_centers[j]);
+                const distance = (0, util_1.euclidean_distance)(data_item, cluster_centers[j]);
                 if (distance < _min_distance) {
                     _min_distance = distance;
                     cluster_index = j;
@@ -44,7 +44,7 @@ function kmeans(data, k, attempt) {
         }
         let diff = 0;
         for (let i = 0; i < k; i++) {
-            diff += util_1.euclidean_distance(cluster_centers[i], new_cluster_centers[i]);
+            diff += (0, util_1.euclidean_distance)(cluster_centers[i], new_cluster_centers[i]);
         }
         if (diff <= THRESOLD) {
             return {

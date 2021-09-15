@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const util_1 = require("./util");
-function kmeans(data, k, attempt) {
+import { euclidean_distance } from "./util";
+export default function kmeans(data, k, attempt) {
     const THRESOLD = 1;
     const cluster_centers = new Array(k);
     const new_cluster_centers = new Array(k);
@@ -17,9 +15,9 @@ function kmeans(data, k, attempt) {
         for (let i = 0; i < data.length; i++) {
             const data_item = data[i];
             let cluster_index = 0;
-            let _min_distance = (0, util_1.euclidean_distance)(data_item, cluster_centers[0]);
+            let _min_distance = euclidean_distance(data_item, cluster_centers[0]);
             for (let j = 1; j < k; j++) {
-                const distance = (0, util_1.euclidean_distance)(data_item, cluster_centers[j]);
+                const distance = euclidean_distance(data_item, cluster_centers[j]);
                 if (distance < _min_distance) {
                     _min_distance = distance;
                     cluster_index = j;
@@ -44,7 +42,7 @@ function kmeans(data, k, attempt) {
         }
         let diff = 0;
         for (let i = 0; i < k; i++) {
-            diff += (0, util_1.euclidean_distance)(cluster_centers[i], new_cluster_centers[i]);
+            diff += euclidean_distance(cluster_centers[i], new_cluster_centers[i]);
         }
         if (diff <= THRESOLD) {
             return {
@@ -64,7 +62,6 @@ function kmeans(data, k, attempt) {
         cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]), size: data.length
     };
 }
-exports.default = kmeans;
 function _swap_array(from, to) {
     for (let i = 0; i < from.length; i++) {
         to[i] = from[i];

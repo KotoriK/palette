@@ -13,14 +13,14 @@ export function awaitImage(imgElement: HTMLImageElement) {
     })
 }
 export function readImage(imgSource: HTMLImageElement) {
-    return _readImage(_prepare2DContext,imgSource)
+    return _readImage(_prepare2DContext, imgSource)
 }
 export function readImageAsync(imgSource: HTMLImageElement) {
-    return _readImage(_prepare2DContextAsync as any,imgSource)
+    return _readImage(_prepare2DContextAsync as any, imgSource)
 }
-function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D,imgSource: HTMLImageElement){
+function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D, imgSource: HTMLImageElement) {
     const { naturalWidth, naturalHeight } = imgSource;
-    const ctx = prepareCtx(naturalWidth,naturalHeight)
+    const ctx = prepareCtx(naturalWidth, naturalHeight)
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
     return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
 }
@@ -43,11 +43,11 @@ function _readImageDownsampling(prepareCtx: (width: number, height: number) => C
     }
 }
 function _prepare2DContext(width: number, height: number) {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d') as NodeCanvasRenderingContext2D|CanvasRenderingContext2D
-        canvas.height = height
-        canvas.width = width
-        return ctx
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d') as NodeCanvasRenderingContext2D | CanvasRenderingContext2D
+    canvas.height = height
+    canvas.width = width
+    return ctx
 }
 /**
  * Use OffscreenCanvas
@@ -178,6 +178,7 @@ export const sortHSL = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) =>
         return result
     }
 export const hslaCSSText = ([h, s, l, a]: HSLA) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`
+export const rgbaCSSText = (pixel: RGBA) => `rgba(${pixel.map(v => Math.floor(v)).join(',')})`
 /* export class RGBAArray extends Uint8ClampedArray {
     pixel(pixel_index: number) {
         return [pixel_index * 4, pixel_index * 4 + 1, pixel_index * 4 + 2, pixel_index * 4 + 3]

@@ -70,9 +70,9 @@ function _prepare2DContextAsync(width, height) {
  */
 export function toPixel(img) {
     const { data } = img;
-    const array = new Array(data.length / 4);
+    const array = [];
     for (let i = 0; i < data.length; i += 4) {
-        array[i / 4] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+        array.push(data.slice(i, i + 4));
     }
     return array;
 }

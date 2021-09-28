@@ -1,5 +1,5 @@
 export declare type HSLA = [number, number, number, number];
-export declare type RGBA = [number, number, number, number];
+export declare type RGBA = [number, number, number, number] | Uint8ClampedArray;
 export declare function awaitImage(imgElement: HTMLImageElement): Promise<void>;
 export declare function readImage(imgSource: HTMLImageElement): import("canvas").ImageData;
 export declare function readImageAsync(imgSource: HTMLImageElement): import("canvas").ImageData;

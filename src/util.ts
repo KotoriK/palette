@@ -1,7 +1,7 @@
 import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
 
 export type HSLA = [number, number, number, number]
-export type RGBA = [number, number, number, number]
+export type RGBA = [number, number, number, number] | Uint8ClampedArray
 export function awaitImage(imgElement: HTMLImageElement) {
     return new Promise<void>((resolve, reject) => {
         imgElement.addEventListener('load', () => {
@@ -75,7 +75,7 @@ export function toPixel(img: ImageData) {
     const { data } = img
     const array: RGBA[] = []
     for (let i = 0; i < data.length; i += 4) {
-        array.push([data[i], data[i + 1], data[i + 2], data[i + 3]])
+        array.push(data.slice(i, i + 4))
     }
     return array
 }

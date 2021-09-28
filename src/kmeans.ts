@@ -2,14 +2,17 @@ import { toPixel, RGBA, euclidean_distance } from "./util"
 
 export default function kmeans(data: RGBA[], k: number, attempt: number): KMeansResult {
     const THRESOLD = 1
-    const cluster_centers: RGBA[] = new Array(k)
-    const new_cluster_centers = new Array(k)
+    const cluster_centers: RGBA[] = []
+    const new_cluster_centers: RGBA[] = []
     //随机选点
     for (let i = 0; i < k; i++) {
         cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
     }
     let iterate_time = 0
-    const cluster_sum = new Array(k).fill(0).map(() => new Array(5).fill(0)) as [number, number, number, number, number][]//[r,g,b,a,c]
+    const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
+    for (let i = 0; i < k; i++) {
+        cluster_sum.push(_filled_array(0, 5) as [number, number, number, number, number])
+    }
     while (iterate_time < attempt) {
         //准备坐标和
         //计算每个点与中心的距离
@@ -74,4 +77,11 @@ function _swap_array(from: Array<any>, to: Array<any>) {
     for (let i = 0; i < from.length; i++) {
         to[i] = from[i]
     }
+}
+function _filled_array<T>(fillWith: T, count: number) {
+    const array: T[] = []
+    for (let i = 0; i < count; i++) {
+        array.push(fillWith)
+    }
+    return array
 }

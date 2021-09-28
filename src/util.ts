@@ -73,9 +73,9 @@ function _prepare2DContextAsync(width: number, height: number) {
  */
 export function toPixel(img: ImageData) {
     const { data } = img
-    const array: RGBA[] = new Array(data.length / 4)
+    const array: RGBA[] = []
     for (let i = 0; i < data.length; i += 4) {
-        array[i / 4] = [data[i], data[i + 1], data[i + 2], data[i + 3]]
+        array.push([data[i], data[i + 1], data[i + 2], data[i + 3]])
     }
     return array
 }

@@ -1,16 +1,14 @@
-import { toPixel, RGBA, euclidean_distance } from "./util"
+import { RGBA, euclidean_distance } from "./util"
+const THRESOLD = 1
 
 export default function kmeans(data: RGBA[], k: number, attempt: number): KMeansResult {
-    const THRESOLD = 1
     const cluster_centers: RGBA[] = []
     const new_cluster_centers: RGBA[] = []
-    //随机选点
-    for (let i = 0; i < k; i++) {
-        cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
-    }
-    let iterate_time = 0
     const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
+    let iterate_time = 0
+
     for (let i = 0; i < k; i++) {
+        cluster_centers.push(data[Math.floor(Math.random() * data.length)])    //随机选点
         cluster_sum.push(_filled_array(0, 5) as [number, number, number, number, number])
     }
     while (iterate_time < attempt) {
@@ -34,17 +32,16 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
             sum[3] += data_item[3]
             sum[4]++
         }
+        let diff = 0
         //重新计算中心点
         for (let i = 0; i < k; i++) {
             const rgbac = cluster_sum[i]
             const count = rgbac[4]
-            if (count == 0) new_cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
-            else {
+            if (count == 0) {
+                new_cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
+            } else {
                 new_cluster_centers[i] = [rgbac[0] / count, rgbac[1] / count, rgbac[2] / count, rgbac[3] / count]
             }
-        }
-        let diff = 0
-        for (let i = 0; i < k; i++) {
             diff += euclidean_distance(cluster_centers[i], new_cluster_centers[i])
         }
         if (diff <= THRESOLD) {
@@ -56,9 +53,12 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
         iterate_time++
         //清空累加
         for (let i = 0; i < k; i++) {
-            for (let j = 0; j < 5; j++) {
-                cluster_sum[i][j] = 0
-            }
+            const sum_array = cluster_sum[i]
+            sum_array[0] = 0
+            sum_array[1] = 0
+            sum_array[2] = 0
+            sum_array[3] = 0
+            sum_array[4] = 0
         }
     }
     return {

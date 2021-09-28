@@ -1,4 +1,7 @@
-export function awaitImage(imgElement) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.rgbaCSSText = exports.hslaCSSText = exports.sortHSL = exports.rgbaToHSLA = exports.normalizeRGBA = exports.euclidean_distance = exports.toPixel = exports.readImageDownsamplingAsync = exports.readImageDownsampling = exports.readImageAsync = exports.readImage = exports.awaitImage = void 0;
+function awaitImage(imgElement) {
     return new Promise((resolve, reject) => {
         imgElement.addEventListener('load', () => {
             resolve();
@@ -8,12 +11,15 @@ export function awaitImage(imgElement) {
         });
     });
 }
-export function readImage(imgSource) {
+exports.awaitImage = awaitImage;
+function readImage(imgSource) {
     return _readImage(_prepare2DContext, imgSource);
 }
-export function readImageAsync(imgSource) {
+exports.readImage = readImage;
+function readImageAsync(imgSource) {
     return _readImage(_prepare2DContextAsync, imgSource);
 }
+exports.readImageAsync = readImageAsync;
 function _readImage(prepareCtx, imgSource) {
     const { naturalWidth, naturalHeight } = imgSource;
     const ctx = prepareCtx(naturalWidth, naturalHeight);
@@ -26,12 +32,14 @@ function _readImage(prepareCtx, imgSource) {
  * @param maxSample
  * @returns
  */
-export function readImageDownsampling(imgSource, maxSample) {
+function readImageDownsampling(imgSource, maxSample) {
     return _readImageDownsampling(_prepare2DContext, imgSource, maxSample);
 }
-export function readImageDownsamplingAsync(imgSource, maxSample) {
+exports.readImageDownsampling = readImageDownsampling;
+function readImageDownsamplingAsync(imgSource, maxSample) {
     return _readImageDownsampling(_prepare2DContextAsync, imgSource, maxSample);
 }
+exports.readImageDownsamplingAsync = readImageDownsamplingAsync;
 function _readImageDownsampling(prepareCtx, imgSource, maxSample) {
     const { naturalWidth: width, naturalHeight: height } = imgSource;
     const scale = width * height / maxSample;
@@ -68,7 +76,7 @@ function _prepare2DContextAsync(width, height) {
  * @param img 要处理的图像矩阵
  * @returns
  */
-export function toPixel(img) {
+function toPixel(img) {
     const { data } = img;
     const array = [];
     for (let i = 0; i < data.length; i += 4) {
@@ -76,13 +84,14 @@ export function toPixel(img) {
     }
     return array;
 }
+exports.toPixel = toPixel;
 /**
  * 返回两个四维坐标间的欧几里得距离
  * @param a
  * @param b
  * @returns
  */
-export function euclidean_distance(a, b) {
+function euclidean_distance(a, b) {
     const r = a[0] - b[0];
     const g = a[1] - b[1];
     const _b = a[2] - b[2];
@@ -98,6 +107,7 @@ export function euclidean_distance(a, b) {
         + Math.pow(a[3] - b[3], 2)
     ) */
 }
+exports.euclidean_distance = euclidean_distance;
 /**
  * 以数组形式返回三个数字中的最大值与最小值
  * @param param0 一个包含三个数字的数组
@@ -138,11 +148,12 @@ function max_min_of_three([a, b, c]) {
         }
     }
 }
-export function normalizeRGBA(rgba) {
+function normalizeRGBA(rgba) {
     //@ts-ignore
     return rgba.map(v => v / 255);
 }
-export function rgbaToHSLA(rgba) {
+exports.normalizeRGBA = normalizeRGBA;
+function rgbaToHSLA(rgba) {
     let h, s;
     //@ts-ignore
     const [max, min] = max_min_of_three(rgba);
@@ -181,6 +192,7 @@ export function rgbaToHSLA(rgba) {
     }
     return [h, s, light_2x / 2, rgba[3]];
 }
+exports.rgbaToHSLA = rgbaToHSLA;
 function adjustAngleIn2Pi(angle) {
     if (angle < 0)
         return angle + 360;
@@ -190,7 +202,7 @@ function adjustAngleIn2Pi(angle) {
     }
     return temp;
 }
-export const sortHSL = (sort = [0, 1, 2, 3]) => (a, b) => {
+const sortHSL = (sort = [0, 1, 2, 3]) => (a, b) => {
     let result;
     for (const s of sort) {
         result = a[s] - b[s];
@@ -202,8 +214,11 @@ export const sortHSL = (sort = [0, 1, 2, 3]) => (a, b) => {
     //@ts-ignore
     return result;
 };
-export const hslaCSSText = ([h, s, l, a]) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`;
-export const rgbaCSSText = (pixel) => `rgba(${pixel.map(v => Math.floor(v)).join(',')})`;
+exports.sortHSL = sortHSL;
+const hslaCSSText = ([h, s, l, a]) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`;
+exports.hslaCSSText = hslaCSSText;
+const rgbaCSSText = (pixel) => `rgba(${pixel.map(v => Math.floor(v)).join(',')})`;
+exports.rgbaCSSText = rgbaCSSText;
 /* export class RGBAArray extends Uint8ClampedArray {
     pixel(pixel_index: number) {
         return [pixel_index * 4, pixel_index * 4 + 1, pixel_index * 4 + 2, pixel_index * 4 + 3]

@@ -4,8 +4,8 @@
   "description": "cluster representative color",
   "main": "dist/index.js",
   "scripts": {
-    "example": "parcel serve --dist-dir ./build example/index.html",
-    "benchmark": "ts-node ./benchmark/kmeans.ts",
+    "example": "parcel serve -d ./build example/index.html",
+    "benchmark": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
     "build": "tsc"
   },
   "keywords": [
@@ -19,9 +19,9 @@
     "@types/offscreencanvas": "^2019.6.3",
     "@types/tape": "^4.13.2",
     "canvas": "^2.8.0",
-    "parcel": "^2.0.0-rc.0",
     "tape": "^5.3.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "parcel-bundler": "^1.12.5"
   }
 }

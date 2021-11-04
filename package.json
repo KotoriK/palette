@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "cluster representative color",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
     "example": "parcel serve -d ./build example/index.html",
     "benchmark": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
-    "build": "tsc"
+    "build": "microbundle"
   },
   "keywords": [
     "palette",
@@ -16,6 +17,7 @@
   "author": "KotoriK",
   "license": "MIT",
   "devDependencies": {
+    "microbundle": "^0.14.1",
     "@types/offscreencanvas": "^2019.6.3",
     "@types/tape": "^4.13.2",
     "canvas": "^2.8.0",

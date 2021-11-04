@@ -3,12 +3,12 @@ import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
 export type HSLA = [number, number, number, number]
 export type RGBA = [number, number, number, number] | Uint8ClampedArray
 export function awaitImage(imgElement: HTMLImageElement) {
-    return new Promise<void>((resolve, reject) => {
-        imgElement.addEventListener('load', () => {
-            resolve()
+    return new Promise<Event>((resolve, reject) => {
+        imgElement.addEventListener('load', (e: Event) => {
+            resolve(e)
         })
-        imgElement.addEventListener('error', () => {
-            reject()
+        imgElement.addEventListener('error', (reason) => {
+            reject(reason)
         })
     })
 }

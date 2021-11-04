@@ -4,3 +4,4 @@ node_modules
 build
 .cache
 benchmark/dist
+package-lock.json

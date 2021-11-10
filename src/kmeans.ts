@@ -1,9 +1,7 @@
 import { euclidean_distance } from "./utils/math"
 import { RGBA } from "./utils/struct"
 
-const THRESOLD = 1
-
-export default function kmeans(data: RGBA[], k: number, attempt: number): KMeansResult {
+export default function kmeans(data: RGBA[], k: number, attempt: number, thresold = 1): KMeansResult {
     const cluster_centers: RGBA[] = []
     const new_cluster_centers: RGBA[] = []
     const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
@@ -47,7 +45,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
             }
             diff += euclidean_distance(cluster_centers[i], new_cluster_centers[i])
         }
-        if (diff <= THRESOLD) {
+        if (diff <= thresold) {
             return {
                 centroid: new_cluster_centers, iteration, fit: true, label: cluster_sum.map(v => v[4]), size: data.length
             }

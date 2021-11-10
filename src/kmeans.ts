@@ -1,14 +1,14 @@
 import { euclidean_distance } from "./utils/math"
-import { RGBA } from "./utils/struct"
+import { Vector4 } from "./utils/struct"
 
-export default function kmeans(data: RGBA[], k: number, attempt: number, thresold = 1): KMeansResult {
-    const cluster_centers: RGBA[] = []
-    const new_cluster_centers: RGBA[] = []
+export default function kmeans(data: Vector4[], k: number, attempt: number, thresold = 1): KMeansResult {
+    const cluster_centers: Vector4[] = []
+    const new_cluster_centers: Vector4[] = []
     const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
     let iteration = 0
-
+    //随机选点
     for (let i = 0; i < k; i++) {
-        cluster_centers.push(data[Math.floor(Math.random() * data.length)])    //随机选点
+        cluster_centers.push(data[Math.floor(Math.random() * data.length)])
         cluster_sum.push(_filled_array(0, 5) as [number, number, number, number, number])
     }
     while (iteration < attempt) {
@@ -67,7 +67,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number, thresol
     }
 }
 export interface KMeansResult {
-    centroid: RGBA[],
+    centroid: Vector4[],
     iteration: number,
     /**是否符合阈值要求 */
     fit: boolean,

@@ -5,13 +5,13 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
     const cluster_centers: RGBA[] = []
     const new_cluster_centers: RGBA[] = []
     const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
-    let iterate_time = 0
+    let iteration = 0
 
     for (let i = 0; i < k; i++) {
         cluster_centers.push(data[Math.floor(Math.random() * data.length)])    //随机选点
         cluster_sum.push(_filled_array(0, 5) as [number, number, number, number, number])
     }
-    while (iterate_time < attempt) {
+    while (iteration < attempt) {
         //准备坐标和
         //计算每个点与中心的距离
         for (let i = 0; i < data.length; i++) {
@@ -38,6 +38,7 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
             const rgbac = cluster_sum[i]
             const count = rgbac[4]
             if (count == 0) {
+                //空类 重新选中心点
                 new_cluster_centers[i] = data[Math.floor(Math.random() * data.length)]
             } else {
                 new_cluster_centers[i] = [rgbac[0] / count, rgbac[1] / count, rgbac[2] / count, rgbac[3] / count]
@@ -46,11 +47,11 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
         }
         if (diff <= THRESOLD) {
             return {
-                cluster_center: new_cluster_centers, iterate_time, fit_thresold: true, label: cluster_sum.map(v => v[4]), size: data.length
+                centroid: new_cluster_centers, iteration, fit: true, label: cluster_sum.map(v => v[4]), size: data.length
             }
         }
         _swap_array(new_cluster_centers, cluster_centers)
-        iterate_time++
+        iteration++
         //清空累加
         for (let i = 0; i < k; i++) {
             const sum_array = cluster_sum[i]
@@ -62,13 +63,14 @@ export default function kmeans(data: RGBA[], k: number, attempt: number): KMeans
         }
     }
     return {
-        cluster_center: cluster_centers, iterate_time, fit_thresold: false, label: cluster_sum.map(v => v[4]), size: data.length
+        centroid: cluster_centers, iteration, fit: false, label: cluster_sum.map(v => v[4]), size: data.length
     }
 }
 export interface KMeansResult {
-    cluster_center: RGBA[],
-    iterate_time: number,
-    fit_thresold: boolean,
+    centroid: RGBA[],
+    iteration: number,
+    /**是否符合阈值要求 */
+    fit: boolean,
     label: number[]
     /**输入的图像的像素计数 */
     size: number

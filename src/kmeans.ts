@@ -1,4 +1,6 @@
-import { RGBA, euclidean_distance } from "./util"
+import { euclidean_distance } from "./utils/math"
+import { RGBA } from "./utils/struct"
+
 const THRESOLD = 1
 
 export default function kmeans(data: RGBA[], k: number, attempt: number): KMeansResult {

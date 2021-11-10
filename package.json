@@ -17,13 +17,16 @@
   "author": "KotoriK",
   "license": "MIT",
   "devDependencies": {
-    "microbundle": "^0.14.1",
     "@types/offscreencanvas": "^2019.6.3",
     "@types/tape": "^4.13.2",
     "canvas": "^2.8.0",
+    "microbundle": "^0.14.1",
+    "parcel-bundler": "^1.12.5",
     "tape": "^5.3.1",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3",
-    "parcel-bundler": "^1.12.5"
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "color-space": "^1.16.0"
   }
 }

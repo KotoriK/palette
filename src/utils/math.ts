@@ -11,10 +11,10 @@ export function euclidean_distance(a: RGBA, b: RGBA) {
     const _b = a[2] - b[2]
     const _a = a[3] - b[3]
     return Math.sqrt(
-        r * r
-        + g * g
-        + _b * _b
-        + _a * _a
+        r ** 2
+        + g ** 2
+        + _b ** 2
+        + _a ** 2
     )
     /* return Math.sqrt(
         Math.pow(a[0] - b[0], 2)

@@ -1,6 +1,6 @@
 
 import { kmeanWorkerData } from "./worker";
-import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, sortHSL, toPixelLAB, labaToRGBA } from '../src/index'
+import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, toPixelLAB, labaToRGBA,getHSLAComparer } from '../src/index'
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
 
@@ -33,7 +33,7 @@ function run(laba = false) {
                         laba ? labaToRGBA(centre as any) : centre
                     )
                 ))
-                .sort(sortHSL([2, 0, 1, 3]))
+                .sort(getHSLAComparer([2, 0, 1, 3]))
                 .forEach(([h, s, l, a]) => {
                     const css_color = `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`
                     const new_div = document.createElement('div')
@@ -53,8 +53,8 @@ function cleanResult() {
     RESULT = []
 }
 document.getElementById('run').onclick = () => {
-    run(true).then(() => {
-        run(false)
+    run(false).then(() => {
+        //run(false)
     })
 }
 document.getElementById('clear').onclick = () => {

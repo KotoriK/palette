@@ -47,18 +47,32 @@ function adjustAngleIn2Pi(angle: number) {
     return temp
 }
 export type IndexOFHSLA = 0 | 1 | 2 | 3
-export const sortHSL = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) =>
-    (a: HSLA, b: HSLA) => {
-        let result: number
-        for (const s of sort) {
-            result = a[s] - b[s]
-            if (result != 0) {
-                return result
-            }
+/**
+ * 返回一个排序HSLA颜色的函数
+ * @param sort 
+ * @returns 
+ */
+export const getHSLAComparer = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) => (a: HSLA, b: HSLA) => {
+    let result: number
+    for (const s of sort) {
+        result = a[s] - b[s]
+        if (result != 0) {
+            return result
         }
-        //其实是赋了值的，但是ts没猜出来
-        //@ts-ignore
-        return result
     }
+    //其实是赋了值的，但是ts没猜出来
+    //@ts-ignore
+    return result
+}
+/**
+ * 将颜色转换成对应的CSS文本
+ * @param param0 像素
+ * @returns hsla(${h}deg,${s}%,${l}%,${a})
+ */
 export const hslaCSSText = ([h, s, l, a]: HSLA) => `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`
+/**
+ * 将颜色转换成对应的CSS文本
+ * @param pixel 像素
+ * @returns rgba(r,g,b,a)
+ */
 export const rgbaCSSText = (pixel: RGBA) => `rgba(${pixel.map(v => Math.floor(v)).join(',')})`

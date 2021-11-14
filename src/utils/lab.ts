@@ -3,6 +3,12 @@ import xyz from 'color-space/xyz'
 import lab from 'color-space/lab'
 import { LABA, RGBA } from './struct'
 
+/**
+ * 提取像素并转换到CIE Lab
+ * 
+ * @param img 
+ * @returns 
+ */
 export function toPixelLAB(img: ImageData) {
     const { data } = img
     const array: LABA[] = []

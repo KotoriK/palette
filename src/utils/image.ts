@@ -1,5 +1,5 @@
 import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
-import { RGBA } from "./struct"
+import { RGBA, Vector4 } from "./struct"
 
 function _prepare2DContext(width: number, height: number) {
     const canvas = document.createElement('canvas')
@@ -74,7 +74,10 @@ export function toPixel(img: ImageData) {
     const { data } = img
     const array: RGBA[] = []
     for (let i = 0; i < data.length; i += 4) {
-        array.push(data.slice(i, i + 4))
+        /**
+         * 如果是用于kmeans()的话长度为4的UInt8ClampedArray不会有任何问题
+         */
+        array.push(data.slice(i, i + 4) as unknown as Vector4)
     }
-    return array
+    return array　
 }

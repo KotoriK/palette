@@ -1,15 +1,15 @@
 import { euclidean_distance } from "./utils/math"
-import { Vector4 } from "./utils/struct"
+import { Vector4, Vector5 } from "./utils/struct"
 
 export default function kmeans(data: Vector4[], k: number, attempt: number, thresold = 1): KMeansResult {
     const cluster_centers: Vector4[] = []
     const new_cluster_centers: Vector4[] = []
-    const cluster_sum: [number, number, number, number, number][]/*[r,g,b,a,c]*/ = []
+    const cluster_sum: Vector5[]/*[r,g,b,a,c]*/ = []
     let iteration = 0
     //随机选点
     for (let i = 0; i < k; i++) {
         cluster_centers.push(data[Math.floor(Math.random() * data.length)])
-        cluster_sum.push(_filled_array(0, 5) as [number, number, number, number, number])
+        cluster_sum.push(_filled_array(0, 5) as Vector5)
     }
     while (iteration < attempt) {
         //准备坐标和

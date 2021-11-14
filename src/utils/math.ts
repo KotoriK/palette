@@ -5,17 +5,16 @@ import { RGBA } from './struct'
  * @param b 
  * @returns 
  */
-export function euclidean_distance(a: RGBA, b: RGBA) {
+export function euclidean_distance_squared(a: RGBA, b: RGBA) {
     const r = a[0] - b[0]
     const g = a[1] - b[1]
     const _b = a[2] - b[2]
     const _a = a[3] - b[3]
-    return Math.sqrt(
-        r ** 2
+    return r ** 2
         + g ** 2
         + _b ** 2
         + _a ** 2
-    )
+    
     /* return Math.sqrt(
         Math.pow(a[0] - b[0], 2)
         + Math.pow(a[1] - b[1], 2)

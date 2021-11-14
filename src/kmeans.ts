@@ -1,4 +1,4 @@
-import { euclidean_distance } from "./utils/math"
+import { euclidean_distance_squared } from "./utils/math"
 import { Vector4, Vector5 } from "./utils/struct"
 
 export default function kmeans(data: Vector4[], k: number, attempt: number, thresold = 1): KMeansResult {
@@ -17,9 +17,9 @@ export default function kmeans(data: Vector4[], k: number, attempt: number, thre
         for (let i = 0; i < data.length; i++) {
             const data_item = data[i]
             let cluster_index = 0
-            let _min_distance = euclidean_distance(data_item, cluster_centers[0])
+            let _min_distance = euclidean_distance_squared(data_item, cluster_centers[0])
             for (let j = 1; j < k; j++) {
-                const distance = euclidean_distance(data_item, cluster_centers[j])
+                const distance = euclidean_distance_squared(data_item, cluster_centers[j])
                 if (distance < _min_distance) {
                     _min_distance = distance
                     cluster_index = j
@@ -43,7 +43,7 @@ export default function kmeans(data: Vector4[], k: number, attempt: number, thre
             } else {
                 new_cluster_centers[i] = [rgbac[0] / count, rgbac[1] / count, rgbac[2] / count, rgbac[3] / count]
             }
-            diff += euclidean_distance(cluster_centers[i], new_cluster_centers[i])
+            diff += Math.sqrt(euclidean_distance_squared(cluster_centers[i], new_cluster_centers[i]))
         }
         if (diff <= thresold) {
             return {

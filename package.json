@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
-    "example": "parcel serve -d ./build example/index.html",
+    "example": "parcel -d ./build example/index.html",
     "benchmark": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
     "build": "microbundle"
   },

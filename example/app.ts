@@ -1,6 +1,6 @@
 
 import { kmeanWorkerData } from "./worker";
-import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, toPixelLAB, labaToRGBA,getHSLAComparer } from '../src/index'
+import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, toPixelLAB, labaToRGBA, getHSLAComparer } from '../src/index'
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
 
@@ -15,7 +15,13 @@ const workers = new Array(5).fill(0).map(() => new Worker('./worker.ts'))
 let RESULT = []
 function run(laba = false) {
     const DEV_DOWNSAMPLING = true
+    performance.mark('convert:start')
     const data = (laba ? toPixelLAB : toPixel)(DEV_DOWNSAMPLING ? readImageDownsampling(img, 100 * 1000)! : readImage(img))
+    performance.mark('convert:end')
+    performance.measure('convert time', 'convert:start', 'convert:end');
+    console.log('convert time',performance.getEntriesByName('convert time')[0].duration)
+    performance.clearMarks();
+    performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
         worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100 } as kmeanWorkerData)
         worker.onmessage = (e) => {
@@ -54,7 +60,7 @@ function cleanResult() {
 }
 document.getElementById('run').onclick = () => {
     run(false).then(() => {
-        //run(false)
+        run(true)
     })
 }
 document.getElementById('clear').onclick = () => {
@@ -62,6 +68,6 @@ document.getElementById('clear').onclick = () => {
 }
 document.getElementById('show').onclick = () => {
     console.log(
-        'time,iteration,laba\n'+
-        RESULT.map(({time,iteration,laba})=>`${time},${iteration},${laba}`).join('\n'))
+        'time,iteration,laba\n' +
+        RESULT.map(({ time, iteration, laba }) => `${time},${iteration},${laba}`).join('\n'))
 }

@@ -4,7 +4,6 @@ export interface kmeanWorkerData {
     img: RGBA[],
     k: number,
     attempt: number,
-    laba:boolean
 }
 self.onmessage = (e) => {
     const { img, k, attempt } = e.data

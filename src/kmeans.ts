@@ -51,7 +51,11 @@ export default function kmeans(data: Vector4[], k: number, attempt: number, thre
         }
         if (diff <= thresold) {
             return {
-                centroid: new_cluster_centers, iteration, fit: true, label: cluster_sum.map(v => v[4]), size: data.length
+                centroid: new_cluster_centers, 
+                iteration, 
+                fit: true, 
+                label: cluster_sum.map(v => v[4]), 
+                size: data.length
             }
         }
         const medium = cluster_centers
@@ -69,7 +73,11 @@ export default function kmeans(data: Vector4[], k: number, attempt: number, thre
         }
     }
     return {
-        centroid: cluster_centers, iteration, fit: false, label: cluster_sum.map(v => v[4]), size: data.length
+        centroid: cluster_centers, 
+        iteration, 
+        fit: false, 
+        label: cluster_sum.map(v => v[4]), 
+        size: data.length
     }
 }
 export interface KMeansResult {

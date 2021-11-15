@@ -79,5 +79,5 @@ export function toPixel(img: ImageData) {
          */
         array.push(data.slice(i, i + 4) as unknown as Vector4)
     }
-    return array　
+    return array
 }

@@ -1,5 +1,5 @@
-import kmeans from "../src/kmeans"
-import { RGBA } from "../src/utils/struct"
+import { RGBA, kmeans } from "../../src"
+
 export interface kmeanWorkerData {
     img: RGBA[],
     k: number,

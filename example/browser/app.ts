@@ -1,6 +1,6 @@
 
 import { kmeanWorkerData } from "./worker";
-import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, toPixelLAB, labaToRGBA, getHSLAComparer } from '../src/index'
+import { readImageDownsampling, toPixel, readImage, rgbaToHSLA, normalizeRGBA, RGBA, toPixelLAB, labaToRGBA, getHSLAComparer } from '../../src'
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
 
@@ -11,7 +11,7 @@ const div_result = document.getElementById('result');
         img.src = URL.createObjectURL(files[0])
     }
 })
-const workers = new Array(5).fill(0).map(() => new Worker('./worker.ts'))
+const workers = new Array(10).fill(0).map(() => new Worker('./worker.ts'))
 let RESULT = []
 function run(laba = false) {
     const DEV_DOWNSAMPLING = true
@@ -19,7 +19,7 @@ function run(laba = false) {
     const data = (laba ? toPixelLAB : toPixel)(DEV_DOWNSAMPLING ? readImageDownsampling(img, 100 * 1000)! : readImage(img))
     performance.mark('convert:end')
     performance.measure('convert time', 'convert:start', 'convert:end');
-    console.log('convert time',performance.getEntriesByName('convert time')[0].duration)
+    console.log('convert time', performance.getEntriesByName('convert time')[0].duration)
     performance.clearMarks();
     performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
@@ -60,7 +60,7 @@ function cleanResult() {
 }
 document.getElementById('run').onclick = () => {
     run(false).then(() => {
-        run(true)
+        //run(true)
     })
 }
 document.getElementById('clear').onclick = () => {

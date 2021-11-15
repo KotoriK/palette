@@ -3,5 +3,5 @@ node_modules
 .DS_Store
 build
 .cache
-benchmark/dist
+example/node/dist
 package-lock.json

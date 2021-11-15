@@ -6,3 +6,4 @@ build
 example/node/dist
 package-lock.json
 __deprecated
+dist

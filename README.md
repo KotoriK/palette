@@ -1,16 +1,17 @@
 # @kotorik/palette
-Color Quantiliaztion in vanilla Javascript, powered by an optimized k-means algorithm.
+Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.
 ## Feature
 ### Quantilization
 * Color quantilization powered by an optimized k-means algorithm. 
-* Support CIE Lab + Alpha and RGBA
+* Support RGBA
+* Support transforming to CIE Lab before process.
 ### Bundle Size
 * 3kB minfied ("color-space" not included)
 * Support Tree Shaking
 ### Other
 * Detailed Type definition
 * Transform cluster result to CSS Text
-
+* Work on Nodejs with ```node-canvas```
 ## Install
 ```
 npm i --save @kotorik/palette

@@ -1,7 +1,7 @@
 {
   "name": "@kotorik/palette",
-  "version": "1.0.0",
-  "description": "cluster representative color",
+  "version": "0.1.0",
+  "description": "Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
@@ -16,7 +16,17 @@
     "theme color",
     "kmeans"
   ],
-  "author": "KotoriK",
+  "author": {
+    "name": "KotoriK",
+    "url": "https://github.com/KotoriK"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KotoriK/palette"
+  },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/offscreencanvas": "^2019.6.4",

@@ -1,5 +1,5 @@
 {
-  "name": "palette",
+  "name": "@kotorik/palette",
   "version": "1.0.0",
   "description": "cluster representative color",
   "main": "dist/index.js",
@@ -7,8 +7,8 @@
   "scripts": {
     "example": "parcel -d ./build example/browser/index.html",
     "example-node": "node --inspect ./example/node/dist/example/node/kmeans.js",
-    "profile":"node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
-    "build-node":"cd ./example/node/ && tsc",
+    "profile": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
+    "build-node": "cd ./example/node/ && tsc",
     "build": "microbundle"
   },
   "keywords": [
@@ -20,13 +20,12 @@
   "license": "MIT",
   "devDependencies": {
     "@types/offscreencanvas": "^2019.6.4",
-    "@types/tape": "^4.13.2",
-    "canvas": "^2.8.0",
     "microbundle": "^0.14.1",
     "parcel-bundler": "^1.12.5",
-    "tape": "^5.3.1",
-    "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
+  },
+  "optionalDependencies": {
+    "canvas": "^2.8.0"
   },
   "dependencies": {
     "color-space": "^1.16.0"

@@ -5,3 +5,4 @@ build
 .cache
 example/node/dist
 package-lock.json
+__deprecated

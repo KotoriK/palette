@@ -1,6 +1,6 @@
-import rgb from 'color-space/rgb'
-import xyz from 'color-space/xyz'
-import lab from 'color-space/lab'
+import rgb from 'color-space/rgb.js'
+import xyz from 'color-space/xyz.js'
+import lab from 'color-space/lab.js'
 import { LABA, RGBA } from './struct'
 export function convertToLab(source: Uint8ClampedArray | Array<number>): Array<number> {
     //CIE Lab包含浮点表示，不能使用Uint8ClampedArray

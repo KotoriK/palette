@@ -6,7 +6,7 @@ Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an opt
 * Support RGBA
 * Support transforming to CIE Lab before process.
 ### Bundle Size
-* 3kB minfied ("color-space" not included)
+* 4kB minfied ("color-space" not included)
 * Support Tree Shaking
 ### Other
 * Detailed Type definition

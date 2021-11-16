@@ -1,5 +1,4 @@
 import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
-import { RGBA, Vector4 } from "./struct"
 
 function _prepare2DContext(width: number, height: number) {
     const canvas = document.createElement('canvas')
@@ -64,20 +63,4 @@ function _readImageDownsampling(prepareCtx: (width: number, height: number) => C
         ctx?.drawImage(imgSource, 0, 0)
         return ctx?.getImageData(0, 0, width, height)
     }
-}
-/**
- * 从@type {Uint8ClampedArray} 中读取，每四个元素合并到一个数组元素中
- * @param img 要处理的图像矩阵
- * @returns 
- */
-export function toPixel(img: ImageData) {
-    const { data } = img
-    const array: RGBA[] = []
-    for (let i = 0; i < data.length; i += 4) {
-        /**
-         * 如果是用于kmeans()的话长度为4的UInt8ClampedArray不会有任何问题
-         */
-        array.push(data.slice(i, i + 4) as unknown as Vector4)
-    }
-    return array
 }

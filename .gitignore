@@ -1,7 +1,7 @@
 .parcel-cache
 node_modules
 .DS_Store
-build
+example/browser/build
 .cache
 example/node/dist
 package-lock.json

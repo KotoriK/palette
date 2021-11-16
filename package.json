@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
-    "example": "parcel -d ./build example/browser/index.html",
+    "example": "parcel -d example/browser/build example/browser/index.html",
     "example-node": "node --inspect ./example/node/dist/example/node/kmeans.js",
     "profile": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
     "build-node": "cd ./example/node/ && tsc",

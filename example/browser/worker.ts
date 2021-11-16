@@ -1,12 +1,12 @@
 import { RGBA, kmeans } from "../../src"
 
 export interface kmeanWorkerData {
-    img: RGBA[],
+    img: Uint8ClampedArray,
     k: number,
     attempt: number,
 }
 self.onmessage = (e) => {
-    const { img, k, attempt } = e.data
+    const { img, k, attempt } = e.data as kmeanWorkerData
     performance.mark('runstart')
     const result = kmeans(img, k, attempt)
     performance.mark('runend')

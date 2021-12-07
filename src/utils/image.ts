@@ -15,14 +15,23 @@ function _prepare2DContextAsync(width: number, height: number) {
     const ctx = canvas.getContext('2d')!
     return ctx
 }
+/**
+ * 
+ * @param imgElement 
+ * @returns Event, undefined when Image is already loaded
+ */
 export function awaitImage(imgElement: HTMLImageElement) {
-    return new Promise<Event>((resolve, reject) => {
-        imgElement.addEventListener('load', (e: Event) => {
-            resolve(e)
-        })
-        imgElement.addEventListener('error', (reason) => {
-            reject(reason)
-        })
+    return new Promise<Event | void>((resolve, reject) => {
+        if (imgElement.complete) {
+            resolve()
+        } else {
+            imgElement.addEventListener('load', (e: Event) => {
+                resolve(e)
+            })
+            imgElement.addEventListener('error', (reason) => {
+                reject(reason)
+            })
+        }
     })
 }
 export function readImage(imgSource: HTMLImageElement) {

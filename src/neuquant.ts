@@ -1,4 +1,5 @@
 import NeuQuant from 'neuquant-js/src/neuquant.js'
+import { indexed } from 'neuquant-js'
 import { RGBA } from './utils/struct'
 function rgba2Rgb(array: Uint8ClampedArray) {
     const rgb = new Uint8ClampedArray(array.length / 4 * 3)
@@ -9,6 +10,7 @@ function rgba2Rgb(array: Uint8ClampedArray) {
         }
         i++
     }
+    return rgb
 }
 /**
  * @param samplefac Sampling factor, which can be changed to increase or decrease quality at the expense of performance. The lower the number, the higher the quality.
@@ -18,10 +20,18 @@ export default function neuquant(img: Uint8ClampedArray, k: number, samplefac = 
     const img_rgb = rgba2Rgb(img)
     const nq = new NeuQuant(img_rgb, { netsize: k, samplefac })
     nq.buildColorMap()
-    const colors = nq.getColorMap()
+    const palette = nq.getColorMap()
+    const indexed_pixel = indexed(img_rgb, palette)
     const pixel: Array<RGBA> = []
-    for (let i = 0, l = colors.length; i < l;) {
-        pixel.push([colors[i++], colors[i++], colors[i++], 255])
+    for (let i = 0, l = palette.length; i < l;) {
+        pixel.push([palette[i++], palette[i++], palette[i++], 255])
     }
-    return pixel
+    return { centroid: pixel, label: count(k, indexed_pixel) }
+}
+function count(k: number, index: number[]) {
+    const counts = new Array(k).fill(0)
+    for (const i of index) {
+        counts[i]++
+    }
+    return counts
 }

@@ -1,6 +1,7 @@
 
 import { kmeanWorkerData } from "./worker";
 import { readImageDownsampling, readImage, rgbaToHSLA, normalizeRGBA, RGBA, labaToRGBA, getHSLAComparer, convertToLab } from '../../src'
+
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
 
@@ -25,6 +26,8 @@ function run(laba = false) {
     performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
         worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100 } as kmeanWorkerData)
+        worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100,compare:true } as kmeanWorkerData)
+
         worker.onmessage = (e) => {
             const { time, result } = e.data
             const row = document.createElement('div')
@@ -60,7 +63,7 @@ function cleanResult() {
     RESULT = []
 }
 document.getElementById('run').onclick = () => {
-    run(true).then(() => {
+    run(false).then(() => {
         //run(true)
     })
 }

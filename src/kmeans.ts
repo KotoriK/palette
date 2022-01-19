@@ -2,12 +2,13 @@ import { euclidean_distance_squared, euclidean_distance_squared_index } from "./
 import { Vector4, Vector5 } from "./utils/struct"
 
 export default function kmeans(data: Uint8ClampedArray | Array<number>, k: number, attempt: number, thresold = 1): KMeansResult {
+    const data_length = data.length
     const cluster_sum: Vector5[]/*[r,g,b,a,c]*/ = []
     let cluster_centers: Vector4[] = []
     let new_cluster_centers: Vector4[] = []
     let iteration = 0
     for (let i = 0; i < k; i++) {
-        const start = Math.floor(Math.random() * data.length)
+        const start = Math.floor(Math.random() * data_length)
         cluster_centers.push(Array.from(data.slice(start, start + 4)) as Vector4)  //随机选点
         new_cluster_centers.push(_filled_array(0, 4) as Vector4)
         cluster_sum.push(_filled_array(0, 5) as Vector5)
@@ -15,7 +16,7 @@ export default function kmeans(data: Uint8ClampedArray | Array<number>, k: numbe
     while (iteration < attempt) {
         //准备坐标和
         //计算每个点与中心的距离
-        for (let i = 0; i < data.length;) {
+        for (let i = 0; i < data_length;) {
             let cluster_index = 0
             let _min_distance = euclidean_distance_squared_index(data, i, cluster_centers[0])
             for (let j = 1; j < k; j++) {

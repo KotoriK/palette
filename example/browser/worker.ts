@@ -12,7 +12,7 @@ self.onmessage = (e) => {
     let result
     if (compare) {
         performance.mark('runstart')
-        result = neuquant(img, k)
+        result = neuquant(img, k,1)
         performance.mark('runend')
         result.iteration = -1
     } else {

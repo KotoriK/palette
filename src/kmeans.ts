@@ -40,7 +40,7 @@ export default function kmeans(data: Uint8ClampedArray | Array<number>, k: numbe
             if (count == 0) {
                 //空类 重新选中心点
                 const start = Math.floor(Math.random() * data.length)
-                new_cluster_centers[i] = Array.from(Array.from(data.slice(start, start + 4)) as Vector4) as any
+                new_cluster_centers[i] = Array.from(data.slice(start, start + 4)) as Vector4
                 diff += thresold
             } else {
                 const new_center = new_cluster_centers[i]

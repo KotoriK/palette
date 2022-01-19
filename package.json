@@ -39,6 +39,7 @@
     "canvas": "^2.9.0"
   },
   "dependencies": {
-    "color-space": "^1.16.0"
+    "color-space": "^1.16.0",
+    "neuquant-js": "github:KotoriK/neuquant-js"
   }
 }

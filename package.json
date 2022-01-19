@@ -7,7 +7,8 @@
   "scripts": {
     "example": "parcel -d example/browser/build example/browser/index.html",
     "example-node": "node --inspect ./example/node/dist/example/node/kmeans.js",
-    "profile": "node --trace_deopt --code_comments --trace_opt ./benchmark/dist/benchmark/kmeans.js",
+    "trace": "node --trace_deopt --trace_opt --redirect-code-traces --print-opt-source --stress-lazy-source-positions --trace_osr --no-concurrent_recompilation --code_comments ./example/node/dist/example/node/kmeans.js",
+    "profile": "node ./example/node/dist/example/node/kmeans.js",
     "build-node": "cd ./example/node/ && tsc",
     "build": "microbundle"
   },
@@ -30,12 +31,12 @@
   "license": "MIT",
   "devDependencies": {
     "@types/offscreencanvas": "^2019.6.4",
-    "microbundle": "^0.14.1",
+    "microbundle": "^0.14.2",
     "parcel-bundler": "^1.12.5",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.4"
   },
   "optionalDependencies": {
-    "canvas": "^2.8.0"
+    "canvas": "^2.9.0"
   },
   "dependencies": {
     "color-space": "^1.16.0"

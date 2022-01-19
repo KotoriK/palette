@@ -1,8 +1,6 @@
-import { CanvasRenderingContext2D, NodeCanvasRenderingContext2D } from "canvas"
-
 function _prepare2DContext(width: number, height: number) {
     const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d') as NodeCanvasRenderingContext2D | CanvasRenderingContext2D
+    const ctx = canvas.getContext('2d')! //contextType 是存在的
     canvas.height = height
     canvas.width = width
     return ctx
@@ -16,7 +14,7 @@ function _prepare2DContextAsync(width: number, height: number) {
     return ctx
 }
 /**
- * 
+ * a Promise resolved when <img> is loaded
  * @param imgElement 
  * @returns Event, undefined when Image is already loaded
  */
@@ -34,13 +32,18 @@ export function awaitImage(imgElement: HTMLImageElement) {
         }
     })
 }
+type ContextPrepareFunc = (width: number, height: number) => CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
+
 export function readImage(imgSource: HTMLImageElement) {
     return _readImage(_prepare2DContext, imgSource)
 }
-export function readImageAsync(imgSource: HTMLImageElement) {
-    return _readImage(_prepare2DContextAsync as any, imgSource)
+/**
+ * read image using OffscreenCanvas
+ */
+export function readImageOffscreen(imgSource: HTMLImageElement) {
+    return _readImage(_prepare2DContextAsync, imgSource)
 }
-function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D, imgSource: HTMLImageElement) {
+function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement) {
     const { naturalWidth, naturalHeight } = imgSource;
     const ctx = prepareCtx(naturalWidth, naturalHeight)
     ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
@@ -55,10 +58,10 @@ function _readImage(prepareCtx: (width: number, height: number) => CanvasRenderi
 export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number) {
     return _readImageDownsampling(_prepare2DContext, imgSource, maxSample)
 }
-export function readImageDownsamplingAsync(imgSource: HTMLImageElement, maxSample: number) {
-    return _readImageDownsampling(_prepare2DContextAsync as any, imgSource, maxSample)
+export function readImageDownsamplingOffscreen(imgSource: HTMLImageElement, maxSample: number) {
+    return _readImageDownsampling(_prepare2DContextAsync, imgSource, maxSample)
 }
-function _readImageDownsampling(prepareCtx: (width: number, height: number) => CanvasRenderingContext2D, imgSource: HTMLImageElement, maxSample: number) {
+function _readImageDownsampling(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement, maxSample: number) {
     const { naturalWidth: width, naturalHeight: height } = imgSource
     const scale = width * height / maxSample
     if (scale > 1) {

@@ -2,8 +2,7 @@ import { RGBA, HSLA } from "./struct"
 import { max_min_of_three } from './math'
 
 export function normalizeRGBA(rgba: RGBA): RGBA {
-    //@ts-ignore
-    return rgba.map(v => v / 255)
+    return rgba.map(v => v / 255) as RGBA
 }
 export function rgbaToHSLA(rgba: RGBA): HSLA {
     let h, s

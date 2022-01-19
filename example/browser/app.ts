@@ -26,7 +26,7 @@ function run(laba = false) {
     performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
         worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100 } as kmeanWorkerData)
-        worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100,compare:true } as kmeanWorkerData)
+        worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100, compare: true } as kmeanWorkerData)
 
         worker.onmessage = (e) => {
             const { time, result } = e.data

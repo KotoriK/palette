@@ -2,8 +2,10 @@
   "name": "@kotorik/palette",
   "version": "1.1.2",
   "description": "Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "type": "module",
+  "source": "src/index.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "scripts": {
     "example": "parcel -d example/browser/build example/browser/index.html",
     "example-node": "node --inspect ./example/node/dist/example/node/kmeans.js",

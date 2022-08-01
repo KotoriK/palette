@@ -1,5 +1,4 @@
-import { RGBA, kmeans, neuquant } from "../../src"
-import { palette, indexed } from 'neuquant-js'
+import { kmeans, neuquant } from "../../src"
 
 export interface kmeanWorkerData {
     img: Uint8ClampedArray,
@@ -12,7 +11,7 @@ self.onmessage = (e) => {
     let result
     if (compare) {
         performance.mark('runstart')
-        result = neuquant(img, k,1)
+        result = neuquant(img, k, 1)
         performance.mark('runend')
         result.iteration = -1
     } else {

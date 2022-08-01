@@ -13,7 +13,7 @@ const div_result = document.getElementById('result');
     }
 })
 const workers = new Array(5).fill(0).map(() => new Worker('./worker.ts'))
-let RESULT = []
+let RESULT:any[] = []
 function run(laba = false) {
     const DEV_DOWNSAMPLING = true
     performance.mark('convert:start')

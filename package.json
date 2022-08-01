@@ -1,6 +1,6 @@
 {
   "name": "@kotorik/palette",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.",
   "type": "module",
   "source": "src/index.ts",

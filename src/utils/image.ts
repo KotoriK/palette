@@ -34,15 +34,12 @@ export function awaitImage(imgElement: HTMLImageElement) {
 }
 type ContextPrepareFunc = (width: number, height: number) => CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
 
-export function readImage(imgSource: HTMLImageElement) {
-    return _readImage(_prepare2DContext, imgSource)
-}
+export const readImage = _readImage.bind(undefined, _prepare2DContext)
 /**
  * read image using OffscreenCanvas
  */
-export function readImageOffscreen(imgSource: HTMLImageElement) {
-    return _readImage(_prepare2DContextAsync, imgSource)
-}
+export const readImageOffscreen = _readImage.bind(undefined, _prepare2DContextAsync)
+
 function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement) {
     const { naturalWidth, naturalHeight } = imgSource;
     const ctx = prepareCtx(naturalWidth, naturalHeight)
@@ -55,12 +52,10 @@ function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement)
  * @param maxSample 
  * @returns 
  */
-export function readImageDownsampling(imgSource: HTMLImageElement, maxSample: number) {
-    return _readImageDownsampling(_prepare2DContext, imgSource, maxSample)
-}
-export function readImageDownsamplingOffscreen(imgSource: HTMLImageElement, maxSample: number) {
-    return _readImageDownsampling(_prepare2DContextAsync, imgSource, maxSample)
-}
+export const readImageDownsampling = _readImageDownsampling.bind(undefined, _prepare2DContext)
+
+export const readImageDownsamplingOffscreen = _readImageDownsampling.bind(undefined, _prepare2DContextAsync)
+
 function _readImageDownsampling(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement, maxSample: number) {
     const { naturalWidth: width, naturalHeight: height } = imgSource
     const scale = width * height / maxSample

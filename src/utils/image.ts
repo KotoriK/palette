@@ -43,8 +43,8 @@ export const readImageOffscreen = _readImage.bind(undefined, _prepare2DContextAs
 function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement) {
     const { naturalWidth, naturalHeight } = imgSource;
     const ctx = prepareCtx(naturalWidth, naturalHeight)
-    ctx?.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
-    return ctx?.getImageData(0, 0, naturalWidth, naturalHeight);
+    ctx.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
+    return ctx.getImageData(0, 0, naturalWidth, naturalHeight);
 }
 /**
  * 降采样后读取图片
@@ -63,11 +63,11 @@ function _readImageDownsampling(prepareCtx: ContextPrepareFunc, imgSource: HTMLI
         const n_width = width / Math.sqrt(scale)
         const n_height = height / Math.sqrt(scale)
         const ctx = prepareCtx(n_width, n_height)
-        ctx?.drawImage(imgSource, 0, 0, n_width, n_height)
-        return ctx?.getImageData(0, 0, n_width, n_height)
+        ctx.drawImage(imgSource, 0, 0, n_width, n_height)
+        return ctx.getImageData(0, 0, n_width, n_height)
     } else {
         const ctx = prepareCtx(width, height)
-        ctx?.drawImage(imgSource, 0, 0)
-        return ctx?.getImageData(0, 0, width, height)
+        ctx.drawImage(imgSource, 0, 0)
+        return ctx.getImageData(0, 0, width, height)
     }
 }

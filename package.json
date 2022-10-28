@@ -1,11 +1,16 @@
 {
   "name": "@kotorik/palette",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.",
   "type": "module",
   "source": "src/index.ts",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.js"
+  },
+  "unpkg":"./dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "example": "parcel -d example/browser/build example/browser/index.html",
@@ -13,7 +18,7 @@
     "trace": "node --trace_deopt --trace_opt --redirect-code-traces --print-opt-source --stress-lazy-source-positions --trace_osr --no-concurrent_recompilation --code_comments ./example/node/dist/example/node/kmeans.js",
     "profile": "node ./example/node/dist/example/node/kmeans.js",
     "build-node": "cd ./example/node/ && tsc",
-    "build": "microbundle --raw --strict"
+    "build": "microbundle --raw --strict --compress false"
   },
   "keywords": [
     "palette",

@@ -19,6 +19,7 @@ export function labaToRGBA(laba: LABA): RGBA {
     const pixel_lab = laba.slice(0, 3)
     const alpha = laba[3]
     const pixel_xyz = lab.xyz(pixel_lab)
-    const pixel_rgb = xyz.rgb(pixel_xyz) as [number, number, number]
-    return [...pixel_rgb, alpha]
+    const pixel_rgb = xyz.rgb(pixel_xyz)
+    pixel_rgb.push(alpha)
+    return pixel_rgb
 }

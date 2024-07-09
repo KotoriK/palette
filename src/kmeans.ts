@@ -126,11 +126,7 @@ export default function kmeans<T extends Uint8ClampedArray | Array<number>, Cent
         iteration++
         //清空累加
         for (let i = 0; i < k; i++) {
-            const sum_array = cluster_sum[i]
-            sum_array[0] = 0
-            sum_array[1] = 0
-            sum_array[2] = 0
-            sum_array[3] = 0
+            cluster_sum[i].fill(0)
         }
     }
     return {

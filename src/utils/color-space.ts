@@ -1,4 +1,4 @@
-import { RGBA, HSLA } from "./struct"
+import { RGBA, HSLA, Vector4 } from "./struct"
 import { max_min_of_three } from './math'
 
 export function normalizeRGBA(rgba: RGBA): RGBA {
@@ -51,7 +51,7 @@ export type IndexOFHSLA = 0 | 1 | 2 | 3
  * @param sort 
  * @returns 
  */
-export const getHSLAComparer = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) => (a: HSLA, b: HSLA) => {
+export const getVector4Comparer = (sort: IndexOFHSLA[] = [0, 1, 2, 3]) => (a: Vector4, b: Vector4) => {
     let result: number
     for (const s of sort) {
         result = a[s] - b[s]

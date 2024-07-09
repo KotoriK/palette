@@ -34,17 +34,29 @@ export function awaitImage(imgElement: HTMLImageElement) {
 }
 type ContextPrepareFunc = (width: number, height: number) => CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
 
+function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement) {
+    const { naturalWidth, naturalHeight } = imgSource;
+    const ctx = prepareCtx(naturalWidth, naturalHeight)
+    ctx.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
+    return ctx.getImageData(0, 0, naturalWidth, naturalHeight);
+}
 export const readImage = _readImage.bind(undefined, _prepare2DContext)
 /**
  * read image using OffscreenCanvas
  */
 export const readImageOffscreen = _readImage.bind(undefined, _prepare2DContextAsync)
 
-function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement) {
-    const { naturalWidth, naturalHeight } = imgSource;
-    const ctx = prepareCtx(naturalWidth, naturalHeight)
-    ctx.drawImage(imgSource, 0, 0, naturalWidth, naturalHeight);
-    return ctx.getImageData(0, 0, naturalWidth, naturalHeight);
+function _readImageDownsampling(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement, maxSample: number) {
+    let { naturalWidth: width, naturalHeight: height } = imgSource
+    const scale = width * height / maxSample
+    if (scale > 1) {
+        const scaleSqrt = Math.sqrt(scale)
+        width = (width / scaleSqrt) | 0
+        height = (height / scaleSqrt) | 0
+    }
+    const ctx = prepareCtx(width, height)
+    ctx.drawImage(imgSource, 0, 0,width, height )
+    return  ctx.getImageData(0, 0, width, height)    
 }
 /**
  * 降采样后读取图片
@@ -55,19 +67,3 @@ function _readImage(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement)
 export const readImageDownsampling = _readImageDownsampling.bind(undefined, _prepare2DContext)
 
 export const readImageDownsamplingOffscreen = _readImageDownsampling.bind(undefined, _prepare2DContextAsync)
-
-function _readImageDownsampling(prepareCtx: ContextPrepareFunc, imgSource: HTMLImageElement, maxSample: number) {
-    const { naturalWidth: width, naturalHeight: height } = imgSource
-    const scale = width * height / maxSample
-    if (scale > 1) {
-        const n_width = width / Math.sqrt(scale)
-        const n_height = height / Math.sqrt(scale)
-        const ctx = prepareCtx(n_width, n_height)
-        ctx.drawImage(imgSource, 0, 0, n_width, n_height)
-        return ctx.getImageData(0, 0, n_width, n_height)
-    } else {
-        const ctx = prepareCtx(width, height)
-        ctx.drawImage(imgSource, 0, 0)
-        return ctx.getImageData(0, 0, width, height)
-    }
-}

@@ -1,4 +1,4 @@
-import kmeans, { KMeansResult } from './kmeans'
+import kmeans, { type KMeansResult } from './kmeans'
 import neuquant from './neuquant'
 export * from './utils/image'
 export * from './utils/color-space'

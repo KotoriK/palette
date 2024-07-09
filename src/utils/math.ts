@@ -1,30 +1,3 @@
-import { RGBA } from './struct'
-/**
- * 返回两个四维坐标间的欧几里得距离
- * @param a 
- * @param b 
- * @returns 
- */
-export function euclidean_distance_squared(a: RGBA, b: RGBA) {
-    const r = a[0] - b[0]
-    const g = a[1] - b[1]
-    const _b = a[2] - b[2]
-    const _a = a[3] - b[3]
-    return r ** 2
-        + g ** 2
-        + _b ** 2
-        + _a ** 2
-}
-export function euclidean_distance_squared_index(a:ArrayLike<number>,a_start: number, b: RGBA) {
-    const r = a[a_start++] - b[0]
-    const g = a[a_start++] - b[1]
-    const _b = a[a_start++] - b[2]
-    const _a = a[a_start++] - b[3]
-    return r ** 2
-        + g ** 2
-        + _b ** 2
-        + _a ** 2
-}
 /**
  * 以数组形式返回三个数字中的最大值与最小值
  * @param param0 一个包含三个数字的数组

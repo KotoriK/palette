@@ -1,16 +1,78 @@
-import { euclidean_distance_squared, euclidean_distance_squared_index } from "./utils/math"
-import { Vector4, Vector5 } from "./utils/struct"
+import type { Vector3, Vector4 } from "./utils/struct"
+function _filled_array<T>(fillWith: T, count: number) {
+    const array: T[] = []
+    for (let i = 0; i < count; i++) {
+        array.push(fillWith)
+    }
+    return array
+}
+function euclidean_distance_squared_index(a: Uint8ClampedArray | number[], a_start: number, b: Uint8ClampedArray | Vector3) {
+    const r = a[a_start++] - b[0]
+    const g = a[a_start++] - b[1]
+    const _b = a[a_start++] - b[2]
+    return r ** 2
+        + g ** 2
+        + _b ** 2
+}
+function euclidean_distance_squared(a: Uint8ClampedArray | number[], b: Uint8ClampedArray | number[]) {
+    const r = a[0] - b[0]
+    const g = a[1] - b[1]
+    const _b = a[2] - b[2]
+    return r ** 2
+        + g ** 2
+        + _b ** 2
 
-export default function kmeans(data: Uint8ClampedArray | Array<number>, k: number, attempt: number, thresold = 1): KMeansResult {
-    const cluster_sum: Vector5[]/*[r,g,b,a,c]*/ = []
-    let cluster_centers: Vector4[] = []
-    let new_cluster_centers: Vector4[] = []
+}
+export interface KMeansResult<T extends Vector3 | Uint8ClampedArray> {
+    centroid: T[],
+    iteration: number,
+    /**是否符合阈值要求 */
+    fit: boolean,
+    label: number[]
+    /**输入的图像的像素计数 */
+    size: number
+}
+/**
+ * 
+ * @param data 
+ * @param k 
+ * @param attempt 
+ * @param thresold 
+ * @param noAlpha 声明图像数据没有alpha通道，跳过alpha通道的计算
+ * @returns 
+ */
+export default function kmeans<T extends Uint8ClampedArray | Array<number>, CentroidType extends Uint8ClampedArray | Vector3 = T extends Uint8ClampedArray ? Uint8ClampedArray : Vector3>
+    (data: T, k: number, attempt: number, thresold = 0.1, noAlpha: boolean = true): KMeansResult<CentroidType> {
+    const cluster_sum: Vector4[]/*[r,g,b,c]*/ = []
+    let pixelCount = data.length / 4
+    let cluster_centers: (CentroidType)[] = []
+    let new_cluster_centers: (CentroidType)[] = []
     let iteration = 0
+
+    const isDataTypedArray = data instanceof Uint8ClampedArray
+    const PIXEL_LEN = noAlpha ? 4 : 3
+    if (!noAlpha) {
+        let j = 0
+        const dataNoAlpha = isDataTypedArray ? new Uint8ClampedArray(pixelCount * 3) : []
+        for (let i = 0; i < data.length;) {
+            if (data[i + 3] == 0) {
+                i += 4
+                continue
+            }
+            dataNoAlpha[j++] = data[i++]
+            dataNoAlpha[j++] = data[i++]
+            dataNoAlpha[j++] = data[i++]
+            i++
+        }
+        data = dataNoAlpha.slice(0, j) as T
+        pixelCount = j / 3
+    }
+    //随机选点
     for (let i = 0; i < k; i++) {
-        const start = Math.floor(Math.random() * data.length)
-        cluster_centers.push(Array.from(data.slice(start, start + 4)) as Vector4)  //随机选点
-        new_cluster_centers.push(_filled_array(0, 4) as Vector4)
-        cluster_sum.push(_filled_array(0, 5) as Vector5)
+        const start = Math.floor(1 * (pixelCount - 1)) * PIXEL_LEN
+        cluster_centers.push(/* Array.from */(data.slice(start, start + 3)) as CentroidType)// ignore alpha
+        new_cluster_centers.push((isDataTypedArray ? new Uint8ClampedArray(3) : _filled_array(0, 3)) as CentroidType)
+        cluster_sum.push(_filled_array(0, 4) as Vector4)
     }
     while (iteration < attempt) {
         //准备坐标和
@@ -29,34 +91,39 @@ export default function kmeans(data: Uint8ClampedArray | Array<number>, k: numbe
             sum[0] += data[i++]
             sum[1] += data[i++]
             sum[2] += data[i++]
-            sum[3] += data[i++]
-            sum[4]++
+            sum[3]++
+            if (PIXEL_LEN === 4) i++
         }
-        let diff = 0
+
+        let allStabled = true
         //重新计算中心点
         for (let i = 0; i < k; i++) {
-            const rgbac = cluster_sum[i]
-            const count = rgbac[4]
+            const rgbc = cluster_sum[i]
+            const count = rgbc[3]
+
             if (count == 0) {
                 //空类 重新选中心点
-                const start = Math.floor(Math.random() * data.length)
-                new_cluster_centers[i] = Array.from(data.slice(start, start + 4)) as Vector4
-                diff += thresold
+                const start = Math.floor(Math.random() * (pixelCount - 1)) * PIXEL_LEN
+                new_cluster_centers[i] = /* Array.from */(data.slice(start, start + 3)) as CentroidType
+                allStabled = false
             } else {
-                const new_center = new_cluster_centers[i]
-                for (let j = 0; j < 4; j++) {
-                    new_center[j] = rgbac[j] / count
+                let new_center = new_cluster_centers[i]
+                for (let j = 0; j < 3; j++) {
+                    new_center[j] = rgbc[j] / count
                 }
-                diff += Math.sqrt(euclidean_distance_squared(cluster_centers[i], new_cluster_centers[i]))
+                const diff = Math.sqrt(euclidean_distance_squared(cluster_centers[i], new_cluster_centers[i]))
+                if (diff > thresold) {
+                    allStabled = false
+                }
             }
         }
-        if (diff <= thresold) {
+        if (allStabled) {
             return {
                 centroid: new_cluster_centers,
                 iteration,
                 fit: true,
-                label: cluster_sum.map(v => v[4]),
-                size: data.length
+                label: cluster_sum.map(v => v[3]),
+                size: pixelCount
             }
         }
         const medium = cluster_centers
@@ -70,30 +137,13 @@ export default function kmeans(data: Uint8ClampedArray | Array<number>, k: numbe
             sum_array[1] = 0
             sum_array[2] = 0
             sum_array[3] = 0
-            sum_array[4] = 0
         }
     }
     return {
         centroid: cluster_centers,
         iteration,
         fit: false,
-        label: cluster_sum.map(v => v[4]),
-        size: data.length
+        label: cluster_sum.map(v => v[3]),
+        size: pixelCount
     }
-}
-export interface KMeansResult {
-    centroid: Vector4[],
-    iteration: number,
-    /**是否符合阈值要求 */
-    fit: boolean,
-    label: number[]
-    /**输入的图像的像素计数 */
-    size: number
-}
-function _filled_array<T>(fillWith: T, count: number) {
-    const array: T[] = []
-    for (let i = 0; i < count; i++) {
-        array.push(fillWith)
-    }
-    return array
 }

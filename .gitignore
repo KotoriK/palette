@@ -7,3 +7,4 @@ example/node/dist
 package-lock.json
 __deprecated
 dist
+pnpm-lock.yaml

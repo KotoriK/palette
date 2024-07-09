@@ -14,15 +14,7 @@ function euclidean_distance_squared_index(a: Uint8ClampedArray | number[], a_sta
         + g ** 2
         + _b ** 2
 }
-function euclidean_distance_squared(a: Uint8ClampedArray | number[], b: Uint8ClampedArray | number[]) {
-    const r = a[0] - b[0]
-    const g = a[1] - b[1]
-    const _b = a[2] - b[2]
-    return r ** 2
-        + g ** 2
-        + _b ** 2
 
-}
 export interface KMeansResult<T extends Vector3 | Uint8ClampedArray> {
     centroid: T[],
     iteration: number,
@@ -36,22 +28,23 @@ export interface KMeansResult<T extends Vector3 | Uint8ClampedArray> {
  * 
  * @param data 
  * @param k 
- * @param attempt 
+ * @param maxAttempt 
  * @param thresold 
- * @param noAlpha 声明图像数据没有alpha通道，跳过alpha通道的计算
+ * @param clipAlpha 裁切掉alpha通道为0的部分
  * @returns 
  */
 export default function kmeans<T extends Uint8ClampedArray | Array<number>, CentroidType extends Uint8ClampedArray | Vector3 = T extends Uint8ClampedArray ? Uint8ClampedArray : Vector3>
-    (data: T, k: number, attempt: number, thresold = 0.1, noAlpha: boolean = true): KMeansResult<CentroidType> {
+    (data: T, k: number, maxAttempt: number, thresold = 2, clipAlpha: boolean = false): KMeansResult<CentroidType> {
     const cluster_sum: Vector4[]/*[r,g,b,c]*/ = []
+    const thresold_squared = thresold ** 2
     let pixelCount = data.length / 4
     let cluster_centers: (CentroidType)[] = []
     let new_cluster_centers: (CentroidType)[] = []
     let iteration = 0
 
     const isDataTypedArray = data instanceof Uint8ClampedArray
-    const PIXEL_LEN = noAlpha ? 4 : 3
-    if (!noAlpha) {
+    const PIXEL_LEN = clipAlpha ? 3 : 4
+    if (clipAlpha) {
         let j = 0
         const dataNoAlpha = isDataTypedArray ? new Uint8ClampedArray(pixelCount * 3) : []
         for (let i = 0; i < data.length;) {
@@ -74,7 +67,7 @@ export default function kmeans<T extends Uint8ClampedArray | Array<number>, Cent
         new_cluster_centers.push((isDataTypedArray ? new Uint8ClampedArray(3) : _filled_array(0, 3)) as CentroidType)
         cluster_sum.push(_filled_array(0, 4) as Vector4)
     }
-    while (iteration < attempt) {
+    while (iteration < maxAttempt) {
         //准备坐标和
         //计算每个点与中心的距离
         for (let i = 0; i < data.length;) {
@@ -108,11 +101,12 @@ export default function kmeans<T extends Uint8ClampedArray | Array<number>, Cent
                 allStabled = false
             } else {
                 let new_center = new_cluster_centers[i]
+                let diffSquared = 0
                 for (let j = 0; j < 3; j++) {
                     new_center[j] = rgbc[j] / count
+                    diffSquared += (new_center[j] - cluster_centers[i][j]) ** 2
                 }
-                const diff = Math.sqrt(euclidean_distance_squared(cluster_centers[i], new_cluster_centers[i]))
-                if (diff > thresold) {
+                if (diffSquared > thresold_squared) {
                     allStabled = false
                 }
             }

@@ -1,6 +1,6 @@
 
 import { kmeanWorkerData } from "./worker";
-import { readImageDownsampling, readImage, rgbaToHSLA, normalizeRGBA, RGBA, labaToRGBA, getHSLAComparer, convertToLab } from '../../src'
+import { readImageDownsampling, readImage, rgbaToHSLA, normalizeRGBA, RGBA, labaToRGBA, getHSLAComparer, convertToLab, KMeansResult } from '../../src'
 
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
@@ -12,8 +12,8 @@ const div_result = document.getElementById('result');
         img.src = URL.createObjectURL(files[0])
     }
 })
-const workers = new Array(5).fill(0).map(() => new Worker('./worker.ts'))
-let RESULT:any[] = []
+const workers = new Array(6).fill(0).map(() => new Worker('./worker.ts', { type: "module" }))
+let RESULT: {time:number,iteration:number,laba:boolean}[] = []
 function run(laba = false) {
     const DEV_DOWNSAMPLING = true
     performance.mark('convert:start')
@@ -26,26 +26,26 @@ function run(laba = false) {
     performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
         worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100 } as kmeanWorkerData)
-        worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100, compare: true } as kmeanWorkerData)
+        //  worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100, compare: true } as kmeanWorkerData)
 
         worker.onmessage = (e) => {
             const { time, result } = e.data
             const row = document.createElement('div')
             const span_time = document.createElement('span')
-            span_time.innerText = `${time}ms,iterate:${result.iteration}, laba:${laba}`
+            span_time.innerText = `${time.toFixed(3)}ms,iterate:${result.iteration}, ${(time / result.iteration).toFixed(2)}ms/it, laba:${laba}`
             RESULT.push({
                 time, iteration: result.iteration, laba
             })
             console.log(e.data);
-            (result.centroid as RGBA[])
+            ((result as KMeansResult<any>).centroid)
                 .map(centre => rgbaToHSLA(
                     normalizeRGBA(
-                        laba ? labaToRGBA(centre as any) : centre
+                        laba ? labaToRGBA(centre as any) : Array.from(centre)
                     )
                 ))
                 .sort(getHSLAComparer([2, 0, 1, 3]))
                 .forEach(([h, s, l, a]) => {
-                    const css_color = `hsla(${h}deg,${s * 100}%,${l * 100}%,${a})`
+                    const css_color = `hsl(${h}deg,${s * 100}%,${l * 100}%)`
                     const new_div = document.createElement('div')
                     new_div.classList.add('color-block')
                     new_div.style.backgroundColor = css_color
@@ -62,15 +62,15 @@ function cleanResult() {
     document.querySelectorAll('#result *').forEach(node => node.remove())
     RESULT = []
 }
-document.getElementById('run').onclick = () => {
-    run(false).then(() => {
-        //run(true)
+document.getElementById('run')!.onclick = () => {
+    run(true).then(() => {
+         run(false)
     })
 }
-document.getElementById('clear').onclick = () => {
+document.getElementById('clear')!.onclick = () => {
     cleanResult()
 }
-document.getElementById('show').onclick = () => {
+document.getElementById('show')!.onclick = () => {
     console.log(
         'time,iteration,laba\n' +
         RESULT.map(({ time, iteration, laba }) => `${time},${iteration},${laba}`).join('\n'))

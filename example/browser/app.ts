@@ -1,7 +1,7 @@
 
 import { kmeanWorkerData } from "./worker";
-import { readImageDownsampling, readImage, rgbaToHSLA, normalizeRGBA, RGBA, labaToRGBA, getHSLAComparer, convertToLab, KMeansResult } from '../../src'
-
+import { readImageDownsampling, readImage, labaToRGBA, convertToLab, KMeansResult } from '../../src'
+import { rgbaToHSLA, normalizeRGBA, getVector4Comparer, } from '../../src/utils/color-space'
 const img = document.getElementsByTagName('img')[0];
 const div_result = document.getElementById('result');
 
@@ -13,7 +13,7 @@ const div_result = document.getElementById('result');
     }
 })
 const workers = new Array(6).fill(0).map(() => new Worker('./worker.ts', { type: "module" }))
-let RESULT: {time:number,iteration:number,laba:boolean}[] = []
+let RESULT: { time: number, iteration: number, laba: boolean }[] = []
 function run(laba = false) {
     const DEV_DOWNSAMPLING = true
     performance.mark('convert:start')
@@ -25,8 +25,8 @@ function run(laba = false) {
     performance.clearMarks();
     performance.clearMeasures();
     return Promise.all(workers.map((worker) => new Promise<void>(resolve => {
+        worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100, compare: true } as kmeanWorkerData)
         worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100 } as kmeanWorkerData)
-        //  worker.postMessage({ img: data, k: parseInt((document.getElementById('k') as HTMLInputElement).value), attempt: 100, compare: true } as kmeanWorkerData)
 
         worker.onmessage = (e) => {
             const { time, result } = e.data
@@ -43,7 +43,7 @@ function run(laba = false) {
                         laba ? labaToRGBA(centre as any) : Array.from(centre)
                     )
                 ))
-                .sort(getHSLAComparer([2, 0, 1, 3]))
+                .sort(getVector4Comparer([2, 0, 1, 3]))
                 .forEach(([h, s, l, a]) => {
                     const css_color = `hsl(${h}deg,${s * 100}%,${l * 100}%)`
                     const new_div = document.createElement('div')
@@ -63,8 +63,8 @@ function cleanResult() {
     RESULT = []
 }
 document.getElementById('run')!.onclick = () => {
-    run(true).then(() => {
-         run(false)
+    run(false).then(() => {
+      //  run(false)
     })
 }
 document.getElementById('clear')!.onclick = () => {

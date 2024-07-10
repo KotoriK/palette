@@ -9,18 +9,18 @@ export interface kmeanWorkerData {
 self.onmessage = (e) => {
     const { img, k, attempt, compare } = e.data as kmeanWorkerData
     let result
+
+    let timeStart = 0;
+    let timeEnd = 0;
     if (compare) {
-        performance.mark('runstart')
+        timeStart = performance.now()
         result = neuquant(img, k, 1)
-        performance.mark('runend')
+        timeEnd = performance.now()
         result.iteration = -1
     } else {
-        performance.mark('runstart')
+        timeStart = performance.now()
         result = kmeans(img, k, attempt)
-        performance.mark('runend')
+        timeEnd = performance.now()
     }
-    performance.measure('run time', 'runstart', 'runend');
-    (e.target as Worker).postMessage({ time: performance.getEntriesByName('run time')[0].duration, result })
-    performance.clearMarks();
-    performance.clearMeasures();
+    (e.target as Worker).postMessage({ time: timeEnd - timeStart, result })
 }

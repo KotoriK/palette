@@ -11,7 +11,7 @@ export default {
         target: 'esnext',
         minify: false,
         rollupOptions: {
-            external: ['neuquant-js', /color-space/],
+            external: ['neuquant-js', /^color-space/],
         }
     }
 } as import('vite').UserConfig

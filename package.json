@@ -1,6 +1,6 @@
 {
   "name": "@kotorik/palette",
-  "version": "3.0.1",
+  "version": "3.0.4",
   "description": "Color Quantiliaztion in vanilla Javascript for browser/Nodejs, powered by an optimized k-means algorithm.",
   "type": "module",
   "main": "dist/index.js",
@@ -36,17 +36,18 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/offscreencanvas": "^2019.7.0",
+    "@types/offscreencanvas": "^2019.7.3",
     "typescript": "^5",
-    "vite": "^5.3.3",
-    "vite-plugin-dts": "^3.9.1",
+    "vite": "^5.4.8",
+    "vite-plugin-dts": "^4.2.2",
     "vite-plugin-node-polyfills": "^0.22.0"
   },
   "optionalDependencies": {
-    "canvas": "^2.9.3"
+    "canvas": "^2.11.2"
   },
   "dependencies": {
-    "color-space": "^2.0.0",
+    "color-space": "^2.0.1",
     "neuquant-js": "github:KotoriK/neuquant-js"
-  }
+  },
+  "sideEffects": false
 }

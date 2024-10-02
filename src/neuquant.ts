@@ -1,4 +1,4 @@
-import { indexed, palette as getPalette } from 'neuquant-js'
+import { indexed, palette as getPalette } from 'neuquant-js/src/helpers.js'
 import { RGBA } from './utils/struct'
 function rgba2Rgb(data: Uint8ClampedArray) {
     const rgb = new Uint8ClampedArray(data.length / 4 * 3)
